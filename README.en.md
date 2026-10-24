@@ -201,6 +201,11 @@ npm run bench:optimizer  # Itinerary Optimizer scheduling eval
 - [`packages/voyage-mcp/README.md`](packages/voyage-mcp/README.md) — MCP server usage
 - [`knowledge/README.md`](knowledge/README.md) — Travel Knowledge RAG format, ingestion, and retrieval
 
+## Authors
+
+- [fhyfrdfd](https://github.com/fhyfrdfd)
+- [hushauiss](https://github.com/hushauiss)
+
 ## Contact
 
 If you run into a problem, have a suggestion, or just want to talk about the project, please open a GitHub Issue.

@@ -201,6 +201,11 @@ npm run bench:optimizer  # Itinerary Optimizer 排程评测
 - [`packages/voyage-mcp/README.md`](packages/voyage-mcp/README.md) — MCP server 使用说明
 - [`knowledge/README.md`](knowledge/README.md) — Travel Knowledge RAG 数据格式、入库与检索
 
+## 作者
+
+- [fhyfrdfd](https://github.com/fhyfrdfd)
+- [hushauiss](https://github.com/hushauiss)
+
 ## 联系作者
 
 使用中遇到问题、想提建议，或者想聊聊这个项目，欢迎在 GitHub Issues 里留言。
