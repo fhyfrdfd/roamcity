@@ -1,15 +1,15 @@
 English | [中文](README.md)
 
-# Voyage · Travel OS
+# RoamCity · 漫游城事 · Travel OS
 
-> **Voyage is an AI-native Travel OS.**
+> **RoamCity is an AI-native Travel OS.**
 > Not a guide generator, not a long-form Markdown machine, and not a bloated OTA sales platform.
-> Its mission: **let a real person genuinely dare to take Voyage on an actual trip.**
+> Its mission: **let a real person genuinely dare to take RoamCity on an actual trip.**
 
 The user types one simple wish:
 > "3 days in Chongqing for 2 people from Guilin, budget ¥2,500, we love food and night views, and we don't want to walk too much every day."
 
-Within seconds, Voyage produces a **real, structured trip project with live AMap (Gaode Maps) coordinates and road network, weather awareness, persistence, and full editability at any time**.
+Within seconds, RoamCity produces a **real, structured trip project with live AMap (Gaode Maps) coordinates and road network, weather awareness, persistence, and full editability at any time**.
 
 During the trip, you just say:
 - "Tomorrow is too tiring" → long-distance climbs are reduced; walking legs automatically switch to taxi and light rail;

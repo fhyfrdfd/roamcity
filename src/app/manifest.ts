@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
+import { brand } from "@/lib/brand";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "漫游城事 · 智慧旅行规划平台",
-    short_name: "漫游城事",
-    description: "以真实地点和城市交通为依据的旅行规划平台",
+    name: `${brand.nameEn} · ${brand.name}`,
+    short_name: brand.name,
+    description: brand.description,
     start_url: "/",
     display: "standalone",
     background_color: "#f6f5f1",
