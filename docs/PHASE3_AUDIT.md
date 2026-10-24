@@ -1,7 +1,7 @@
 # Voyage Phase 3 代码库审计报告 (PHASE3_AUDIT.md)
 
 > 审计日期：2026-09-05  
-> 审计对象：`Joho6666/voyage` (Phase 1 + Phase 2 交付基线)  
+> 审计对象：`fhyfrdfd/roamcity` (Phase 1 + Phase 2 交付基线)  
 > 审计目标：分析现有实现度、Mock 遗留点、数据流与架构断点，为 Phase 3 Real World Travel Beta 提供改造基准。
 
 ---

@@ -1,82 +1,121 @@
-English | [中文](README.md)
+[中文](README.md) | English
 
-# RoamCity · 漫游城事 · Travel OS
+# RoamCity
 
-> **RoamCity is an AI-native Travel OS.**
-> Not a guide generator, not a long-form Markdown machine, and not a bloated OTA sales platform.
-> Its mission: **let a real person genuinely dare to take RoamCity on an actual trip.**
+**An open-source, AI-native, local-first travel operating system.**
 
-The user types one simple wish:
-> "3 days in Chongqing for 2 people from Guilin, budget ¥2,500, we love food and night views, and we don't want to walk too much every day."
+Turn one sentence of travel intent into a real itinerary that works day by day and can be changed mid-trip.
+No invented places, no fabricated prices, and no auto-applied decisions.
 
-Within seconds, RoamCity produces a **real, structured trip project with live AMap (Gaode Maps) coordinates and road network, weather awareness, persistence, and full editability at any time**.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Next.js 15](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org)
+[![React 19](https://img.shields.io/badge/React-19-61dafb)](https://react.dev)
 
-During the trip, you just say:
-- "Tomorrow is too tiring" → long-distance climbs are reduced; walking legs automatically switch to taxi and light rail;
-- "It's raining today" → a Rain Plan triggers: open-air walkways are smoothly replaced by the indoor Three Gorges Museum;
-- "Save ¥100 today" → taxis intelligently fall back to the metro, and the dining mix is fine-tuned;
-- "Push everything back an hour" → all nodes shift as a whole and each leg is recalibrated.
+<img src="docs/assets/screenshots/home.png" alt="RoamCity home page: start planning with one sentence" width="880" />
 
-Every natural-language instruction is compiled into a Zod-validated structured `TravelAction`, which produces a quantified comparison report (`TripChangeSet`) shown in a Diff review modal — nothing is applied until you confirm.
+## Highlights
 
----
+- **No account required** — open it and go; sign-in exists only for optional cross-device sync.
+- **Local-first** — itineraries, proposals, and knowledge live in your own `.voyage/` directory, never on a RoamCity server.
+- **Bring your own keys** — AMap, LLM, and social data are all BYO; with zero configuration you can still walk through the full Demo mode.
+- **Real POIs, routes, and weather** — coordinates, road networks, and forecasts come from real providers; estimates are always labelled, and unknown stays unknown.
+- **Guides become itineraries** — paste a Xiaohongshu / Douyin link or guide text; every place is verified before it enters the trip.
+- **AI optimization** — reorder each day by geographic clustering, time windows, weather, pace, and walking tolerance, with a stated reason for every move.
+- **Today execution mode** — one screen answers: next stop, how to get there, when to leave, how much walking remains, and when the day ends.
+- **Propose, never auto-apply** — every change produces a quantified Diff and a one-time `proposalToken`; nothing is written back until you confirm.
+- **Web + MCP + Skill** — one Runtime drives the Web Agent, an MCP server (Claude Desktop / Cursor), and external Skill packages.
 
 ## UI Preview
 
-First, chat with the Agent to clarify your needs, then confirm to generate real routes; even after generation you can keep adjusting the itinerary.
+Screenshots below are from the current build (captured 2026-10-23).
 
-### 1. Conversational Planning · A travel profile forms as you chat
+### 1. Home · Describe your trip in one sentence
 
-<img src="docs/assets/screenshots/01-conversation-planning.png" alt="Conversational planning: chat on the left, route profile updating in real time on the right" width="880" />
+No sign-up required. Type your destination, dates, party size, and preferences to start planning.
 
-### 2. Trip Workspace · Show only the day you're looking at
+<img src="docs/assets/screenshots/home.png" alt="RoamCity home page: describe your trip in one sentence" width="880" />
 
-The left side shows only the selected day's itinerary, and the right-side map draws only that day's markers and routes; every route is labeled with its source (AMap live / estimated).
+### 2. New Trip · A travel profile forms as you chat
 
-<img src="docs/assets/screenshots/02-trip-workspace.png" alt="Trip workspace: single-day-focused itinerary list and map" width="880" />
+The dialog on the left asks for whatever is still missing while the profile panel on the right updates in sync; real routes and budgets are generated only after you confirm.
 
-### 3. Today + AI Assistant · Make changes mid-trip
+<img src="docs/assets/screenshots/new-trip.png" alt="New Trip: conversational planning with a live travel profile" width="880" />
 
-The top of the Today page gives you the "next stop" and one-tap navigation — no need to decipher a screenful of information; the assistant on the right can modify the itinerary per day, and only produces proposals that must be confirmed in the Diff before being written back.
+### 3. My Trips · Manage every trip in one place
 
-<img src="docs/assets/screenshots/03-day-focus-assistant.png" alt="Next-stop card for the current day and the AI assistant panel" width="880" />
+Filter by All / Upcoming / Traveling / Completed, and duplicate, archive, or delete trips.
 
-### 4. My Trips · All of your trip projects
+<img src="docs/assets/screenshots/trips.png" alt="My Trips: list of trip projects" width="880" />
 
-<img src="docs/assets/screenshots/04-my-trips.png" alt="My Trips list" width="880" />
+### 4. 3D Scene · An explorable Hongyadong
 
-### 5. Data Source Settings · Keys stay server-side only
+Open a location's 3D scene straight from the itinerary to inspect the night view and nearby landmarks before deciding to go.
 
-Only shows whether each capability "is configured" — never displays or receives key values, so credentials never leak into the browser.
+<img src="docs/assets/screenshots/3d-hongyadong.png" alt="Explorable 3D scene of Hongyadong" width="880" />
 
-<img src="docs/assets/screenshots/05-data-sources.png" alt="API and data source settings page, showing only configuration status" width="880" />
+### 5. Mobile · The full flow at real-device size
 
----
+Bottom navigation, a half-screen itinerary drawer, and 44px touch targets are built for real devices — not a shrunken desktop layout.
 
-## Feature Highlights
+<p>
+<img src="docs/assets/screenshots/mobile-01.jpg" alt="Mobile screenshot 1" width="230" />
+<img src="docs/assets/screenshots/mobile-02.jpg" alt="Mobile screenshot 2" width="230" />
+<img src="docs/assets/screenshots/mobile-03.jpg" alt="Mobile screenshot 3" width="230" />
+</p>
 
-- **Agent-led guidance + visible tool calls**: the top of the Today page proactively offers clickable next-step suggestions based on trip facts (upcoming rain, empty days, over budget, overly long walks, unchecked quotes, pre-trip to-dos); when the Agent answers, it automatically calls 15 real tools (AMap POI / routes / weather / social evidence / quotes), with call traces shown as badges in the reply card. The LLM can only generate proposals — applying them requires your confirmation in the Diff.
-- **Multi-turn follow-ups**: AI adjustments on the Today page carry the last 8 turns of context — follow-ups like "a bit less of that" or "switch it to the afternoon" work directly.
-- **One-tap guide import (Xiaohongshu / Douyin / WeChat)**: **paste a Xiaohongshu (RED) or Douyin (TikTok China) link directly into the planning dialog** (short links work too) — the body text is fetched, every place is verified one by one against AMap, stops are laid into each day in the original order of the post and drawn on the map, and a checklist is generated; you can also search viral Xiaohongshu notes on the Explore page or paste guide text from any platform. Check off a place and the corresponding task is crossed out automatically.
-- **A single creation path**: say where you want to go in one sentence, the Agent asks for the missing dates and party size, and a real route is generated once you confirm; the profile panel can be filled manually at any time.
-- **Explore page integration**: real-time discovery of food, lodging, and activities, plus a "saved" list, unified in category tabs on the Explore page; discovery results drop straight onto the map or into the itinerary.
-- **Single-day focus**: whichever day you view is the only day whose list and routes are shown; "All" switches back to the full-trip view in one tap.
-- **Complete mobile navigation**: bottom navigation "Itinerary / Today / Map / More", with the share button visible on mobile; non-trip pages (My Trips / Settings) get a global bottom bar.
-- **Planning sessions survive refresh**: the session ID is persisted locally and the conversation is saved server-side; returning to the planning page lets you "continue your last session", and dead sessions are honestly reported and cleaned up.
-- **Operational hardening**: paid APIs (AMap / TikHub / LLM / Fliggy / planning) are rate-limited per caller with a sliding window, returning 429 + Retry-After when exceeded (single-instance in-memory implementation); structured JSON server-side logging covers degradation and failure paths; guest workspaces are auto-cleaned on a TTL basis (default 30 days, adjustable via `VOYAGE_GUEST_TTL_DAYS`, `0` disables it).
+## Run it in 30 seconds
 
----
+```bash
+git clone https://github.com/fhyfrdfd/roamcity.git
+cd roamcity
+npm install
+npm run dev
+```
 
-## The Four Pillars
+Open [http://localhost:3002](http://localhost:3002).
 
-| Pillar | Role | Core Capability |
+With no environment variables, the app starts in **Demo mode**: a built-in Chongqing itinerary and vector basemap let you walk through planning, Diff confirmation, and Today mode end to end.
+
+> Requires Node.js 20+.
+
+## Provider Tiers: Start from Zero Config
+
+You can experience the whole product without configuring any key. Unlock capabilities one tier at a time:
+
+| Tier | What you need | What it unlocks |
 |---|---|---|
-| **1. Plan** | Trip planning & timeline generation | Aggregates real POIs for the destination, clusters them geographically, and automatically lays out meals, visit durations, and budget distribution. |
-| **2. Explore** | Real exploration & place discovery | Live AMap POI search with precise tag filters like "indoor, night views, free, less walking" — no fake ratings, no empty prices. |
-| **3. Adapt** | Dynamic adaptation & diff review | A global Command Bar (`Cmd+K`) is available at any time; before applying changes it quantifies walking reduction, transport swaps, and cost deltas, with 10-step undo whenever you need it. |
-| **4. Travel** | On-the-ground execution console (Today) | Mobile-first, one-handed operation: locks onto the next stop in real time, departure and arrival countdowns, and hands off to the real AMap app for navigation. |
+| **Level 0 · Demo** | Nothing | `VOYAGE_DEMO_MODE=true`, a built-in Chongqing itinerary + vector basemap, the full planning / Diff / Today loop |
+| **Level 1 · AMap** | `AMAP_SERVER_KEY` (+ `NEXT_PUBLIC_AMAP_KEY` for the real map) | Real POI search, real road-network routing, real weather |
+| **Level 2 · LLM** | `LLM_BASE_URL` / `LLM_MODEL` / `LLM_API_KEY` | Natural-language planning chat, guide-link parsing, multi-turn Today Agent suggestions |
+| **Level 3 · Social / Offers** | `TIKHUB_API_KEY` (social), `MEITUAN_HT_TOKEN` (Meituan), `FLIGGY_*` (Fliggy) | Xiaohongshu / Douyin guide fetching, popularity signals, flight and local-life offers |
 
----
+When any tier is missing, RoamCity **degrades and labels it honestly** (`providerStatus`: `REAL` / `ESTIMATED` / `CURATED` / `UNAVAILABLE`…). Estimates are never disguised as real data.
+
+## How It Works
+
+The traveller types one sentence:
+
+> "3 days in Chongqing from Guilin, 2 people, budget 2500, love food and night views, don't want to walk too much each day."
+
+RoamCity produces, within seconds, a **real, structured, map-grounded, weather-aware, persistent, editable trip project**.
+
+Mid-trip, the traveller only needs to say:
+
+- "Tomorrow is too tiring" → fewer long climbs; walking legs switch to taxi and light rail;
+- "It's raining today" → Rain Plan swaps outdoor walks for the indoor Three Gorges Museum;
+- "Save 100 today" → taxis fall back to metro and the dining mix is trimmed;
+- "Push it back an hour" → the whole day shifts and every transfer is recalibrated.
+
+Every instruction is compiled into a Zod-validated structured `TravelAction`, producing a quantified comparison report (`TripChangeSet`) in a Diff review modal. **Nothing is applied until you confirm** (one-time `proposalToken`, valid for 10 minutes, resistant to replay and tampering).
+
+## Four Pillars
+
+| Phase | Role | Core capability |
+|---|---|---|
+| **1. Plan** | Itinerary and timeline generation | Real POI aggregation, geographic clustering, automatic meal / visit-duration / budget placement. |
+| **2. Explore** | Real discovery and merchant search | Live AMap POI search with precise filters such as indoor, night view, free, and low walking; no fabricated ratings or empty prices. |
+| **3. Adapt** | Dynamic adaptation and diff review | Global Command Bar (`Cmd+K`) quantifies walking reduction, transport swaps, and cost deltas before applying; 10-step undo. |
+| **4. Travel** | On-the-ground console (Today) | Mobile-first one-handed operation: next stop, departure and arrival countdowns, one-tap navigation into the AMap app. |
 
 ## Architecture
 
@@ -99,83 +138,72 @@ Server Boundary (API Routes with 'server-only' secrets isolation)
   └── Supabase (Secure RLS bound to auth.uid() + In-Memory Fallback)
 ```
 
----
-
-## Quick Start
+## Verification & Evaluation
 
 ```bash
-cd voyage
-npm install
-npm run dev
+npm run lint           # ESLint
+npm run typecheck      # strict TypeScript check
+npm test               # Vitest unit and integration tests (97 test files)
+npm run build          # production Turbopack build
+npm run test:e2e       # Playwright end-to-end tests (42 tests across 14 specs)
+npm run test:e2e:smoke # smoke subset: 3D scene, conversational planning, offline fallback, mobile nav, remove-day, session resume
 ```
 
-Open [http://localhost:3002](http://localhost:3002) in your browser.
-
-### Verification Commands
 ```bash
-npm run lint         # ESLint checks (0 errors, 0 warnings)
-npm run typecheck    # TypeScript strict type checking (0 errors)
-npm test             # Vitest unit & integration tests (all green)
-npm run build        # Production Turbopack build
-npm run test:e2e     # Playwright end-to-end suite (42 tests across 14 specs)
-npm run test:e2e:smoke # Fast subset: offline fallback, mobile nav, remove-day, session resume
+npm run bench            # deterministic behaviour benchmark, writes benchmarks/results/latest.json
+npm run bench:compare    # compare against the baseline; exits 1 on regression
+npm run bench:baseline   # refresh the baseline after a clean run
+npm run eval:profile     # planning-profile extraction eval
+npm run eval:nlu         # NLU diff eval
+npm run eval:trust       # 20-case trust eval (real AMap + LLM), writes report.md
+npm run bench:optimizer  # Itinerary Optimizer scheduling eval
 ```
 
-### Benchmarks & Evaluations
-```bash
-npm run bench            # Deterministic behaviour benchmark -> benchmarks/results/latest.json
-npm run bench:compare    # Diff against the baseline; exit code 1 on regression
-npm run bench:baseline   # Promote latest.json after confirming no regressions
-npm run eval:profile     # Planning-profile extraction evaluation
-npm run eval:nlu         # NLU diff evaluation
-npm run eval:trust       # 20-task trust evaluation (real AMap + LLM) -> report.md
-```
-
-> `eval:trust` calls paid external services; see `benchmarks/eval/trust/README.md` for methodology and limits.
-
----
+> `eval:trust` calls real external services and incurs cost; methodology is documented in `benchmarks/eval/trust/README.md`.
 
 ## Environment Variables (`.env.local`)
 
-| Variable | Description | Fallback Behavior |
+| Variable | Purpose | Behaviour when missing |
 |---|---|---|
-| `NEXT_PUBLIC_AMAP_KEY` | AMap JS API key (web client) | Degrades to an SVG vector-projected base map when unset |
+| `NEXT_PUBLIC_AMAP_KEY` | AMap JS API key (web client) | Falls back to the SVG vector basemap |
 | `NEXT_PUBLIC_AMAP_SECURITY_CODE` | AMap JS API security code | Used together with the JS key |
-| `AMAP_SERVER_KEY` | AMap Web-service server-side REST key | Falls back to a curated real-place library with Haversine estimates when unset |
-| `LLM_BASE_URL` | OpenAI-compatible LLM API root URL (e.g. Volcano Ark / DeepSeek) | Switches to a rule engine when unset |
-| `LLM_API_KEY` | Server-side model API key | Kept server-side, never exposed to the browser |
+| `AMAP_SERVER_KEY` | AMap Web Service REST key (server) | Uses the curated real-place library and Haversine estimates |
+| `LLM_BASE_URL` | OpenAI-compatible LLM base URL (e.g. Ark, DeepSeek) | Falls back to the rule engine |
+| `LLM_API_KEY` | Server-side model API key | Kept server-side; never exposed to the browser |
 | `LLM_MODEL` | Model name (e.g. `deepseek-v3`, `gpt-4o-mini`) | Defaults to `gpt-4o-mini` |
-| `EMBEDDING_BASE_URL` | OpenAI-compatible Embeddings API root URL | RAG degrades to keyword/local knowledge retrieval when unset |
-| `EMBEDDING_API_KEY` | Embedding API key | Server-side only |
-| `EMBEDDING_MODEL` | 1536-dim embedding model | Semantic vector retrieval is skipped when unset |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Runs seamlessly in in-memory demo mode when unset |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase client anon key | Strictly governed by row-level security in `0002_rls_secure.sql` |
-| `TIKHUB_API_KEY` | TikHub social retrieval (Xiaohongshu / Douyin / Weibo / WeChat Search) | Social evidence honestly shows as unavailable when unset |
-| `VOYAGE_GUEST_TTL_DAYS` | Guest workspace TTL in days | Defaults to `30`; set `0` to disable auto-cleanup |
+| `EMBEDDING_BASE_URL` | OpenAI-compatible embeddings base URL | RAG falls back to keyword / local knowledge retrieval |
+| `EMBEDDING_API_KEY` | Embeddings API key | Server-side only |
+| `EMBEDDING_MODEL` | 1536-dimension embedding model | No semantic vector search |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Runs silently in in-memory Demo mode |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key | Governed by `0002_rls_secure.sql` row-level security |
+| `TIKHUB_API_KEY` | TikHub social search (Xiaohongshu / Douyin / Weibo / WeChat) | Social evidence is shown as unavailable |
+| `VOYAGE_GUEST_TTL_DAYS` | Guest workspace expiry in days | `30` by default; `0` disables cleanup |
 
----
+## Feature Highlights
 
-## Documentation Index
+- **Agent-led guidance + visible tool calls**: the Today page proactively offers clickable next-step suggestions based on trip facts (upcoming rain, empty days, over budget, overly long walks, unchecked quotes, pre-trip to-dos); the Agent calls real tools (AMap POI / routes / weather / social evidence / quotes) and shows the call trace as badges in the reply card. The LLM can only propose — applying requires your confirmation in the Diff.
+- **Itinerary Optimizer v1**: geographic clustering, intra-day nearest-neighbour chains, time windows (night views in the evening, meals anchored to meal times), user profile (pace, walking tolerance, elderly / children), and rain-aware indoor priority; `decisions[]` explains every adjustment, and facts that cannot be scheduled are recorded honestly in `unresolvedConstraints`.
+- **Multi-turn follow-ups**: Today-page AI adjustments carry the last 8 turns of context, so follow-ups like "a bit less" or "switch it to the afternoon" work directly.
+- **One-tap guide import (Xiaohongshu / Douyin / WeChat)**: paste a link (short links work) into the planning dialog; the body is fetched, every place is verified against AMap, stops are laid into each day in the original order and drawn on the map, and a checklist is generated.
+- **Single-day focus**: only the selected day's list and routes are shown; "All" switches back to the whole trip.
+- **Full mobile navigation**: bottom navigation for Itinerary / Today / Map / More, a visible share button on mobile, and a global bottom bar on non-trip pages (My Trips / Settings).
+- **Recoverable planning sessions**: the session ID is persisted locally and the conversation is stored server-side; "continue last planning" restores it, and expired sessions are reported and cleaned up.
+- **Operational hardening**: paid endpoints (AMap / TikHub / LLM / Fliggy / planning) are rate-limited per caller with 429 + Retry-After; structured JSON logs cover degradation and failure paths; guest workspaces expire by TTL.
 
+## Docs
+
+- [`docs/CURRENT_ARCHITECTURE.md`](docs/CURRENT_ARCHITECTURE.md) — current architecture and module boundaries
 - [`docs/GOLDEN_TRIP.md`](docs/GOLDEN_TRIP.md) — Guilin ↔ Chongqing 3-day/2-night golden acceptance baseline
-- [`docs/PHASE3_AUDIT.md`](docs/PHASE3_AUDIT.md) — In-depth 15-dimension codebase audit report
-- [`docs/PHASE3_IMPLEMENTATION_PLAN.md`](docs/PHASE3_IMPLEMENTATION_PLAN.md) — Detailed Phase 3 execution plan
-- [`docs/REAL_WORLD_PROVIDER_GUIDE.md`](docs/REAL_WORLD_PROVIDER_GUIDE.md) — Guide to integrating AMap / weather / booking / Supabase
-- [`docs/TRAVEL_ACTIONS.md`](docs/TRAVEL_ACTIONS.md) — Specs for all 24 TravelActions and how the Diff preview works
-- [`docs/BETA_ACCEPTANCE.md`](docs/BETA_ACCEPTANCE.md) — 18-scenario beta user-path acceptance report
-- [`knowledge/README.md`](knowledge/README.md) — Travel Knowledge RAG data format, ingestion, and retrieval
-
----
+- [`docs/REAL_WORLD_PROVIDER_GUIDE.md`](docs/REAL_WORLD_PROVIDER_GUIDE.md) — AMap / weather / booking / Supabase integration guide
+- [`docs/TRAVEL_ACTIONS.md`](docs/TRAVEL_ACTIONS.md) — TravelAction spec and Diff preview
+- [`docs/RUNTIME_COMMAND_EXPOSURE.md`](docs/RUNTIME_COMMAND_EXPOSURE.md) — Web / MCP / Skill command exposure matrix
+- [`docs/PROJECT_INNOVATION.md`](docs/PROJECT_INNOVATION.md) — innovation and differentiation
+- [`packages/voyage-mcp/README.md`](packages/voyage-mcp/README.md) — MCP server usage
+- [`knowledge/README.md`](knowledge/README.md) — Travel Knowledge RAG format, ingestion, and retrieval
 
 ## Contact
 
-If you run into problems, have suggestions, or just want to chat about this project, feel free to reach out on WeChat:
-
-<img src="docs/assets/wechat-joho.jpg" alt="Author's WeChat QR code" width="280" />
-
-> You can also leave a message in GitHub Issues. The personal WeChat QR code is rotated periodically — if it stops working, please open an Issue first.
-
----
+If you run into a problem, have a suggestion, or just want to talk about the project, please open a GitHub Issue.
 
 ## License
 
