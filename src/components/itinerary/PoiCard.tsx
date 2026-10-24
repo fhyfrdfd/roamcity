@@ -1,0 +1,186 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVertical, MoreHorizontal, Star } from "lucide-react";
+import { toast } from "sonner";
+import { TravelImage } from "@/components/travel/TravelImage";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { PLACE_CATEGORY_LABEL, type ItineraryItem, type Place } from "@/types/travel";
+import { DAY_COLORS } from "@/types/travel";
+import { cn } from "@/lib/utils";
+import { removeItemFromTrip, TripCommandError } from "@/services/trip-commands";
+import { ScenePreviewLink } from "@/components/3d/ScenePreviewLink";
+import { useHistoryStore } from "@/store/history-store";
+import { resyncTrip, useTripStore } from "@/store/trip-store";
+import { useUiStore } from "@/store/ui-store";
+import { ShieldCheck, TriangleAlert } from "lucide-react";
+
+export function PoiCard({
+  item,
+  place,
+  index,
+  dayIndex,
+}: {
+  item: ItineraryItem;
+  place: Place;
+  index: number;
+  dayIndex: number;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
+  const selectPlace = useUiStore((s) => s.selectPlace);
+  const selected = useUiStore((s) => s.selectedPlaceId === place.id);
+  const isHovered = useUiStore((s) => s.hoverPlaceId === place.id);
+  const hoverPlace = useUiStore((s) => s.hoverPlace);
+  const patch = useTripStore((s) => s.patchTrip);
+  const setTrip = useTripStore((s) => s.setTrip);
+  const pushHistory = useHistoryStore((s) => s.push);
+  const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
+  const trust = useTripStore((s) => s.trip.trust);
+  const destination = useTripStore((s) => s.trip.destination);
+  const validationIssue = trust?.validation.issues.find((issue) => issue.itemId === item.id || issue.placeId === place.id);
+  const evidence = trust?.evidence.find((card) => card.placeId === place.id);
+  const cardRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (selected && cardRef.current) {
+      cardRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [selected]);
+
+  // Server-backed removal (the old local-only patch vanished on rehydrate):
+  // snapshot for undo, optimistic hide, revision-locked write, rollback or
+  // resync on failure.
+  const removeFromTrip = () => {
+    const snapshot = useTripStore.getState().trip;
+    const snapshotRevision = useTripStore.getState().revision;
+    pushHistory(snapshot);
+    patch((t) => ({ ...t, items: t.items.filter((candidate) => candidate.id !== item.id) }));
+    void removeItemFromTrip({ tripId: snapshot.id, itemId: item.id, expectedTripRevision: snapshotRevision })
+      .then(({ trip: saved, revision: savedRevision }) => {
+        setTrip(saved, savedRevision);
+        toast.success(`已从行程移除「${place.name}」`);
+      })
+      .catch((cause) => {
+        setTrip(snapshot, snapshotRevision);
+        if (cause instanceof TripCommandError && cause.code === "REVISION_CONFLICT") {
+          toast.error("行程已在别处更新，已同步最新版本，请重试");
+          void resyncTrip(snapshot.id);
+          return;
+        }
+        toast.error(cause instanceof TripCommandError ? cause.message : "移除失败，请重试");
+      });
+  };
+
+  const setCombinedRef = (node: HTMLElement | null) => {
+    setNodeRef(node);
+    cardRef.current = node;
+  };
+
+  return (
+    <article
+      data-testid="itinerary-card"
+      data-place-id={place.id}
+      data-selected={selected ? "true" : "false"}
+      ref={setCombinedRef}
+      role="button"
+      tabIndex={0}
+      aria-pressed={selected}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectPlace(place.id);
+        }
+      }}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      className={cn(
+        "group flex gap-3 rounded-[12px] border border-transparent px-3 py-2 hover:bg-secondary/70 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-ring",
+        selected && "border-primary/40 bg-accent ring-1 ring-primary/20",
+        isHovered && !selected && "bg-secondary/80 border-border/70",
+        isDragging && "z-10 bg-surface shadow-[var(--shadow-float)]",
+      )}
+      onClick={() => selectPlace(place.id)}
+      onMouseEnter={() => hoverPlace(place.id)}
+      onMouseLeave={() => hoverPlace(null)}
+    >
+      <div className="w-10 shrink-0 pt-1 text-right font-mono text-[11px] tabular-nums text-muted-foreground">
+        {item.startTime}
+      </div>
+      <div className="flex min-w-0 flex-1 gap-3">
+        <div
+          className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full text-[11px] font-semibold text-white"
+          style={{ background: color }}
+        >
+          {String(index + 1).padStart(2, "0")}
+        </div>
+        <TravelImage src={place.image} alt={place.name} className="h-[72px] w-[96px] rounded-[10px]" />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className={cn("truncate text-sm font-medium", item.status === "done" && "text-muted-foreground line-through")}>{place.name}</h3>
+            {item.status === "done" ? (
+              <span className="shrink-0 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">已完成</span>
+            ) : null}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="rounded-[8px] p-1 text-muted-foreground opacity-0 hover:bg-secondary group-hover:opacity-100 focus-visible:opacity-100 [@media(pointer:coarse)]:opacity-100"
+                  aria-label="更多"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <MoreHorizontal className="size-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onSelect={removeFromTrip}>
+                  从行程移除
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[12px] text-muted-foreground">
+            <span>{PLACE_CATEGORY_LABEL[place.category]}</span>
+            <span className="inline-flex items-center gap-0.5">
+              <Star className="size-3 fill-current" />
+              {place.rating.toFixed(1)}
+            </span>
+            <span>{place.priceLabel}</span>
+            <span>{item.duration} min</span>
+            <span>{place.openingStatus === "open" ? "营业中" : null}</span>
+            <ScenePreviewLink destination={destination} placeName={place.name} placeId={place.id} />
+          </p>
+          <p className="mt-1 line-clamp-1 text-[12px] leading-4 text-muted-foreground">{place.description}</p>
+          {evidence ? (
+            <details className="mt-1 text-[10px] text-muted-foreground" onClick={(event) => event.stopPropagation()}>
+              <summary className="flex cursor-pointer list-none flex-wrap items-center gap-1.5">
+                {evidence.real ? <ShieldCheck className="size-3 text-emerald-600" /> : <TriangleAlert className="size-3 text-amber-600" />}
+                <span>{evidence.source === "amap" ? "高德来源" : evidence.source === "demo" ? "Demo / 估算" : "人工或未验证"}</span>
+                <span>{Math.round(evidence.confidence * 100)}% 置信 · 查看依据</span>
+                {validationIssue ? <span className={validationIssue.severity === "error" ? "text-red-600" : "text-amber-700"}>{validationIssue.message}</span> : null}
+              </summary>
+              <div className="mt-1 space-y-0.5 border-l border-border pl-2 leading-4">
+                <p>{evidence.whyChosen}</p>
+                {evidence.address ? <p>地址：{evidence.address}</p> : null}
+                {evidence.openingHours ? <p>营业时间：{evidence.openingHours}</p> : null}
+                {evidence.price !== undefined ? <p>参考价格：¥{evidence.price}</p> : null}
+                {evidence.distanceFromPreviousM !== undefined ? <p>距上一站：{Math.round(evidence.distanceFromPreviousM)} 米 · 约 {Math.round(evidence.travelMinutesFromPrevious ?? 0)} 分钟</p> : null}
+                <p>数据记录时间：{new Date(evidence.fetchedAt).toLocaleString("zh-CN")}</p>
+              </div>
+            </details>
+          ) : null}
+        </div>
+        <button
+          type="button"
+          className="self-center text-muted-foreground opacity-0 group-hover:opacity-100 focus-visible:opacity-100 touch-none [@media(pointer:coarse)]:opacity-100"
+          aria-label="拖动排序"
+          {...attributes}
+          {...listeners}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <GripVertical className="size-4" />
+        </button>
+      </div>
+    </article>
+  );
+}

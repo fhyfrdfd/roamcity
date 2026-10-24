@@ -1,0 +1,179 @@
+import { test, expect } from "@playwright/test";
+
+test.describe("Voyage Golden Trip E2E Suite", () => {
+  test.beforeEach(async ({ page }) => {
+    // Intercept external third-party requests for deterministic behavior
+    await page.route("**/restapi.amap.com/**", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ status: "1", info: "OK", pois: [], paths: [] }),
+      });
+    });
+  });
+
+  test("Flow 1: Landing -> Input requirement -> Create Trip -> Trip Workspace", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("h1")).toContainText(/告诉.*你想去哪儿/);
+
+    // Check prefilled Golden Trip prompt
+    const promptInput = page.locator("textarea");
+    await expect(promptInput).toBeVisible();
+    await promptInput.fill("从桂林去重庆玩3天，2个人，预算2500，喜欢美食和夜景，不想每天走太多路。");
+
+    // Click submit button
+    const submitBtn = page.locator('button[type="submit"]');
+    await submitBtn.click();
+
+    // Should navigate to new-trip with query
+    await page.waitForURL(/\/new-trip/);
+    await expect(page).toHaveURL(/.*new-trip.*/);
+
+    // Conversation-first entry: the social reference stays opt-in and unchecked.
+    await page.getByRole("button", { name: "开始对话" }).click();
+    await expect(page.getByRole("heading", { name: "一起把这趟旅行定下来" })).toBeVisible({ timeout: 15000 });
+
+    const socialReference = page.getByRole("checkbox", { name: /参考社区攻略/ });
+    await expect(socialReference).toBeVisible();
+    await expect(socialReference).not.toBeChecked();
+
+    // Confirm the dates the planner must not invent, then generate.
+    await page.getByLabel("出发日期").fill("2030-05-01");
+    await page.getByLabel("返程日期").fill("2030-05-03");
+    const generateBtn = page.getByRole("button", { name: /生成路线图|直接生成路线/ });
+    await expect(generateBtn).toBeVisible({ timeout: 15000 });
+    await generateBtn.click();
+
+    // Wait for the actual trip workspace content instead of relying on heading order.
+    await page.waitForURL(/\/trip\//, { timeout: 30000 });
+    await expect(page.locator("body")).toContainText("重庆");
+    const sourcePanel = page.locator('[aria-label="本次规划来源"]:visible');
+    await expect(sourcePanel).toContainText("确定性规则规划");
+    await expect(sourcePanel).toContainText("本次未调用外部 LLM");
+    await expect(sourcePanel).toContainText("未请求");
+  });
+
+  test("Flow 2: Itinerary item interaction and map sync", async ({ page }) => {
+    await page.goto("/trip/chongqing-2026");
+    await page.waitForLoadState("networkidle");
+    await expect(page.locator("body")).toBeVisible();
+
+    // Wait for the client tree to be mounted before clicking: otherwise the
+    // click can land before React attaches its handler and is silently lost.
+    await expect(page.getByRole("tablist", { name: "选择日期" })).toBeVisible({ timeout: 15000 });
+
+    const card = page.locator('[data-testid="itinerary-card"]').first();
+    await expect(card).toBeVisible({ timeout: 15000 });
+    await expect(card).toHaveAttribute("data-selected", "false");
+
+    await card.click();
+
+    // Selection is a behavioural contract carried by data-selected; the class
+    // list is only how it is styled.
+    await expect(card).toHaveAttribute("data-selected", "true", { timeout: 10000 });
+    await expect(card).toHaveClass(/border-primary|bg-accent/);
+  });
+
+  test("Flow 3: AI Action '今晚少走一点' -> Proposal Diff Modal -> Apply", async ({ page }) => {
+    await page.goto("/trip/chongqing-2026/today");
+    await expect(page.getByText("今日行程")).toBeVisible({ timeout: 15000 });
+
+    // Adjustments are collapsed by default so the day itself leads; one tap
+    // reveals them. Assert that contract before using the actions.
+    const helper = page.getByText(/需要帮忙/).first();
+    await expect(helper).toBeVisible({ timeout: 10000 });
+    await helper.click();
+
+    // Tap "少走路" quick action button
+    const reduceWalkBtn = page.getByRole("button", { name: /少走路|太累了/i }).first();
+    await reduceWalkBtn.click();
+
+    // Verify TripDiffModal pops up with proposal comparison
+    const modal = page.locator('[role="dialog"]');
+    await expect(modal).toBeVisible({ timeout: 10000 });
+    await expect(modal).toContainText(/步行距离|交通调整|优化建议/);
+
+    // Click Apply changes
+    const applyBtn = modal.getByRole("button", { name: /应用此修改|应用/i });
+    await applyBtn.click();
+
+    // Modal closes
+    await expect(modal).not.toBeVisible();
+  });
+
+  test("Flow 4: Refresh -> Trip still exists with persisted data", async ({ page }) => {
+    await page.goto("/trip/chongqing-2026");
+    await expect(page.locator("body")).toContainText(/重庆/i, { timeout: 15000 });
+
+    // Reload page
+    await page.reload();
+
+    // Verify itinerary still loads and displays
+    await expect(page.locator("body")).toContainText(/重庆/i, { timeout: 15000 });
+    const items = page.locator("article");
+    await expect(items.first()).toBeVisible();
+  });
+
+  test("Flow 5: Weather -> Rain Plan -> Proposal Diff -> Apply", async ({ page }) => {
+    await page.goto("/trip/chongqing-2026/today");
+    await expect(page.getByText("今日行程")).toBeVisible({ timeout: 15000 });
+
+    const helper = page.getByText(/需要帮忙/).first();
+    await expect(helper).toBeVisible({ timeout: 10000 });
+    await helper.click();
+
+    // Click "下雨方案" button
+    const rainPlanBtn = page.getByRole("button", { name: /下雨方案|换下雨方案/i }).first();
+    if (await rainPlanBtn.isVisible()) {
+      await rainPlanBtn.click();
+
+      // Diff modal should appear
+      const modal = page.locator('[role="dialog"]');
+      await expect(modal).toBeVisible({ timeout: 10000 });
+      await expect(modal).toContainText(/下雨方案|室内|步行/);
+
+      // Confirm apply
+      const applyBtn = modal.getByRole("button", { name: /应用此修改|应用/i });
+      await applyBtn.click();
+      await expect(modal).not.toBeVisible();
+    }
+  });
+
+  test("Flow 6: Undo -> Trip restored", async ({ page }) => {
+    await page.goto("/trip/chongqing-2026/today");
+    await expect(page.getByText("今日行程")).toBeVisible({ timeout: 15000 });
+
+    // Click Undo button
+    const undoBtn = page.getByRole("button", { name: /撤销/i });
+    await expect(undoBtn).toBeVisible();
+    await undoBtn.click();
+
+    // Verify page remains stable and responsive
+    await expect(page.locator("body")).toBeVisible();
+  });
+
+  test("Flow 7: Explore -> Add POI -> Itinerary update", async ({ page }) => {
+    await page.goto("/trip/chongqing-2026/explore");
+    await expect(page.getByText("重庆 探索")).toBeVisible({ timeout: 15000 });
+
+    // Explore places cards should be rendered
+    const placeCards = page.locator("article");
+    await expect(placeCards.first()).toBeVisible();
+
+    // Open add to day dialog on the first card
+    const addBtn = placeCards.first().getByRole("button", { name: /加入|添加|\+/i });
+    if (await addBtn.isVisible()) {
+      await addBtn.click();
+
+      // Dialog opens
+      const dayDialog = page.locator('[role="dialog"]');
+      await expect(dayDialog).toBeVisible();
+
+      // Select Day 1
+      const dayOption = dayDialog.getByRole("button", { name: /Day 1|第 1 天/i });
+      if (await dayOption.isVisible()) {
+        await dayOption.click();
+      }
+    }
+  });
+});

@@ -1,0 +1,11 @@
+{
+  "id": "chongqing-hongyadong",
+  "title": "洪崖洞 · 立体山城",
+  "city": "重庆",
+  "placeNames": ["洪崖洞", "洪崖洞民俗风貌区"],
+  "model": "/3d/scenes/chongqing-hongyadong/model.glb",
+  "cover": "/3d/scenes/chongqing-hongyadong/cover.svg",
+  "license": "CC0-1.0（项目自制占位模型）",
+  "source": "Voyage 团队自制占位场景，正式演示前请替换为有明确许可证的 GLB",
+  "format": "glb"
+}

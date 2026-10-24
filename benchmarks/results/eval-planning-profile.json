@@ -1,0 +1,484 @@
+{
+  "generatedAt": "2026-10-05T15:32:51.548Z",
+  "dataset": 59,
+  "realPassed": 59,
+  "realFailed": 0,
+  "stillBroken": 0,
+  "fixed": 0,
+  "avgRecall": 1,
+  "avgPrecision": 1,
+  "results": [
+    {
+      "id": "route-basic",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "route-qianwang",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "route-chufadi",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "route-destination-only",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "route-destination-trap",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "route-clean-suffix",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "date-iso",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "date-chinese",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "date-slash",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "date-range",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "days-digit",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "days-chinese",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "days-liang",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "people-digit",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "people-liang",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "people-family",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "people-chinese",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "budget-plain",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "budget-yen",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "budget-wan",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "budget-qian",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "budget-dash",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "pace-relaxed",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "pace-packed",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "pace-balanced",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "walk-low",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "walk-low-variant",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "walk-high",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "walk-medium",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "transport-public",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "transport-metro",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "transport-taxi",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "transport-drive",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "transport-walk-trap",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "vibe-order",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "vibe-multi",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "vibe-single",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "mustvisit-simple",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "mustvisit-multi",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "mustvisit-prefix",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "mustvisit-daka",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "avoid-simple",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "avoid-bikai",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "dietary-simple",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "dietary-veg",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "dietary-allergy",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "children",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "elderly",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "accessibility",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "budgetmode-flexible",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "budgetmode-balanced",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "social-yes",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "social-no",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "combo-rich",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "combo-family",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "empty",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "whitespace",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "chit-chat",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    },
+    {
+      "id": "question-only",
+      "passed": true,
+      "knownFailure": false,
+      "recall": 1,
+      "precision": 1,
+      "failures": []
+    }
+  ]
+}

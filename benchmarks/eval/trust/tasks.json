@@ -1,0 +1,165 @@
+{
+  "_comment": "20 trust-replan evaluation tasks. Fixed start dates keep runs comparable; expect is scored identically for the Voyage pipeline and the pure-LLM baseline.",
+  "cases": [
+    {
+      "id": "cq-001",
+      "city": "重庆",
+      "prompt": "带父母在重庆玩两天，少走路，预算3000，想看历史文化和吃当地美食",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 3, "budget": 3000, "walkingTolerance": "low", "pace": "balanced", "vibes": ["历史文化", "美食"], "elderly": true },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 60, "noDuplicatePlace": true }
+    },
+    {
+      "id": "cq-002",
+      "city": "重庆",
+      "prompt": "两个人重庆一日游，预算800，想看夜景、吃火锅和小面",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 1, "travelers": 2, "budget": 800, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["夜景", "美食"] },
+      "expect": { "days": 1, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "cd-003",
+      "city": "成都",
+      "prompt": "小两口成都两天，预算2500，必去大熊猫基地，喜欢美食和慢生活",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 2, "budget": 2500, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["美食", "休闲"], "mustVisit": ["大熊猫"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 60, "noDuplicatePlace": true }
+    },
+    {
+      "id": "xa-004",
+      "city": "西安",
+      "prompt": "一家三口西安两天，预算3000，想认真看历史，兵马俑一定要去，尽量少走路",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 3, "budget": 3000, "walkingTolerance": "low", "pace": "balanced", "vibes": ["历史文化"], "mustVisit": ["兵马俑"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 60, "noDuplicatePlace": true }
+    },
+    {
+      "id": "hz-005",
+      "city": "杭州",
+      "prompt": "带孩子去杭州两天，预算4000，想亲近自然又不太累，最好有适合小朋友的地方",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 3, "budget": 4000, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["亲子", "自然风光"], "children": true },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "xm-006",
+      "city": "厦门",
+      "prompt": "情侣厦门两天，预算3000，想看海、逛文艺街区、喝咖啡",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 2, "budget": 3000, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["海边", "文艺", "咖啡"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "dl-007",
+      "city": "大理",
+      "prompt": "一个人去大理两天，预算1500，想放松、看洱海、找咖啡馆发呆",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 1, "budget": 1500, "walkingTolerance": "high", "pace": "balanced", "vibes": ["休闲", "咖啡", "自然风光"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "bj-008",
+      "city": "北京",
+      "prompt": "带老人一家四口北京三天，预算6000，想看故宫和经典历史景点，走路要少",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 3, "travelers": 4, "budget": 6000, "walkingTolerance": "low", "pace": "balanced", "vibes": ["历史文化"], "elderly": true, "mustVisit": ["故宫"] },
+      "expect": { "days": 3, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 75, "noDuplicatePlace": true }
+    },
+    {
+      "id": "sh-009",
+      "city": "上海",
+      "prompt": "上海两天，两个人预算3500，想看艺术展、逛老街区、吃好吃的",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 2, "budget": 3500, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["艺术", "美食", "城市漫步"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "gz-010",
+      "city": "广州",
+      "prompt": "三个朋友广州两天，预算2500，重点早茶和本地历史，不想太赶",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 3, "budget": 2500, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["美食", "历史文化"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "sz-011",
+      "city": "苏州",
+      "prompt": "两个人苏州两天，预算2000，想看园林和古镇，节奏慢一点",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 2, "budget": 2000, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["园林", "古镇"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "nj-012",
+      "city": "南京",
+      "prompt": "南京两天，两个人预算2000，想看历史和吃小吃，行程别太满",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 2, "budget": 2000, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["历史文化", "美食"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "wh-013",
+      "city": "武汉",
+      "prompt": "武汉一日游，两个人预算800，想吃热干面、看江景和黄鹤楼",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 1, "travelers": 2, "budget": 800, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["美食", "城市景观"], "budgetMode": "tight" },
+      "expect": { "days": 1, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "cs-014",
+      "city": "长沙",
+      "prompt": "两个年轻人长沙两天，预算1500，想体验夜生活和地道小吃，预算有点紧",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 2, "budget": 1500, "walkingTolerance": "high", "pace": "balanced", "vibes": ["夜生活", "美食"], "budgetMode": "tight" },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "qd-015",
+      "city": "青岛",
+      "prompt": "一家三口青岛两天，预算3000，想看海、吃海鲜、逛逛老城区",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 3, "budget": 3000, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["海边", "美食", "历史文化"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "km-016",
+      "city": "昆明",
+      "prompt": "两个人昆明两天，预算2000，想看自然风光、逛公园，节奏轻松",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 2, "budget": 2000, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["自然风光", "休闲"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "sy-017",
+      "city": "三亚",
+      "prompt": "情侣三亚三天度假，预算8000，想住得舒服、看海、吃海鲜，不想赶行程",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 3, "travelers": 2, "budget": 8000, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["度假", "海边", "美食"] },
+      "expect": { "days": 3, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 60, "noDuplicatePlace": true }
+    },
+    {
+      "id": "gl-018",
+      "city": "桂林",
+      "prompt": "两个人桂林两天，预算2000，想看山水、坐船、吃米粉",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 2, "budget": 2000, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["自然风光", "美食"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 60, "noDuplicatePlace": true }
+    },
+    {
+      "id": "ly-019",
+      "city": "洛阳",
+      "prompt": "两个人洛阳两天，预算1800，想看古迹和博物馆，吃点本地特色",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 2, "budget": 1800, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["历史文化", "美食"], "dietary": ["素食"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    },
+    {
+      "id": "hrb-020",
+      "city": "哈尔滨",
+      "prompt": "两个人哈尔滨两天，预算2500，想看老建筑、吃俄式西餐和东北菜",
+      "startDate": "2030-05-01",
+      "constraints": { "days": 2, "travelers": 2, "budget": 2500, "walkingTolerance": "medium", "pace": "balanced", "vibes": ["建筑", "美食"], "avoid": ["购物中心"] },
+      "expect": { "days": 2, "minStopsPerDay": 3, "mustHaveMeal": true, "maxTravelMinutes": 45, "noDuplicatePlace": true }
+    }
+  ]
+}

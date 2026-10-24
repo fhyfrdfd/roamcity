@@ -1,0 +1,4095 @@
+{
+  "generatedAt": "2026-10-21T14:21:12.964Z",
+  "model": "deepseek-chat",
+  "provider": "amap",
+  "tasks": 20,
+  "completed": {
+    "pipeline": 20,
+    "baseline": 20
+  },
+  "pipeline": {
+    "cases": 20,
+    "factualAccuracy": 1,
+    "addressRate": 1,
+    "duplicateRate": 0,
+    "mealCoverage": 1,
+    "stopsPerDay": 4.516666666666667,
+    "constraintPassRate": 0.4,
+    "validationPassRate": 0.6,
+    "avgErrors": 0.5,
+    "avgWarnings": 0.8,
+    "avgScore": 79.5,
+    "avgMaxTravelMinutes": 56.8,
+    "severeTravelRate": 0.1,
+    "latencyMeanMs": 5456,
+    "latencyP50Ms": 5327,
+    "latencyP95Ms": 7120,
+    "repairAttempts": 7,
+    "repairSuccesses": 7,
+    "repairSuccessRate": 1
+  },
+  "baseline": {
+    "cases": 20,
+    "factualAccuracy": 0.7629581529581531,
+    "addressRate": 1,
+    "duplicateRate": 0,
+    "mealCoverage": 1,
+    "stopsPerDay": 4.408333333333333,
+    "constraintPassRate": 0.35,
+    "validationPassRate": 0.35,
+    "avgErrors": 1.05,
+    "avgWarnings": 2,
+    "avgScore": 55.25,
+    "avgMaxTravelMinutes": 135.3,
+    "severeTravelRate": 0.4,
+    "latencyMeanMs": 2539,
+    "latencyP50Ms": 2435,
+    "latencyP95Ms": 3244,
+    "repairAttempts": 19,
+    "repairSuccesses": 7,
+    "repairSuccessRate": 0.3684210526315789
+  },
+  "cases": [
+    {
+      "id": "cq-001",
+      "city": "重庆",
+      "prompt": "带父母在重庆玩两天，少走路，预算3000，想看历史文化和吃当地美食",
+      "pipeline": {
+        "ms": 7278,
+        "tripId": "24570ad6-2885-4df5-a6d0-1fadb6f178df",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 11,
+          "stopsByDay": [
+            5,
+            6
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 11,
+          "factualAccuracy": 1,
+          "addressStops": 11,
+          "addressRate": 1,
+          "maxTravelMinutes": 51,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 80,
+            "passed": true,
+            "errors": 0,
+            "warnings": 2,
+            "codes": {
+              "DAY_OVERLOADED": 2
+            }
+          },
+          "estimatedSpend": 2551,
+          "budget": 3000,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "warnings": [],
+        "repair": {
+          "attempted": true,
+          "success": null,
+          "ms": 6,
+          "beforeIssues": 2,
+          "afterIssues": 2,
+          "inventedPlaces": [],
+          "note": "没有可自动修复的问题"
+        }
+      },
+      "baseline": {
+        "ms": 3183,
+        "plan": {
+          "title": "重庆两日慢游：历史文化与地道美食（少步行·适合父母）",
+          "dayPlans": [
+            {
+              "title": "第一天：渝中半岛历史寻踪与江景美食",
+              "stops": [
+                {
+                  "name": "湖广会馆",
+                  "address": "渝中区长滨路芭蕉园1号",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 30,
+                  "meal": null
+                },
+                {
+                  "name": "解放碑",
+                  "address": "渝中区民族路177号",
+                  "category": "attraction",
+                  "startTime": "11:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "老四川大酒楼（解放碑店）",
+                  "address": "渝中区八一路183号",
+                  "category": "food",
+                  "startTime": "12:40",
+                  "durationMinutes": 80,
+                  "estimatedCost": 100,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "重庆中国三峡博物馆",
+                  "address": "渝中区人民路236号",
+                  "category": "attraction",
+                  "startTime": "14:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "洪崖洞民俗风貌区",
+                  "address": "渝中区嘉陵江滨江路88号",
+                  "category": "viewpoint",
+                  "startTime": "17:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "小滨楼（洪崖洞店）",
+                  "address": "渝中区嘉陵江滨江路88号",
+                  "category": "food",
+                  "startTime": "19:10",
+                  "durationMinutes": 60,
+                  "estimatedCost": 80,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "第二天：磁器口古镇与红色记忆",
+              "stops": [
+                {
+                  "name": "磁器口古镇",
+                  "address": "沙坪坝区磁器口正街",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "陈麻花（磁器口总店）",
+                  "address": "沙坪坝区磁器口正街",
+                  "category": "shopping",
+                  "startTime": "11:40",
+                  "durationMinutes": 30,
+                  "estimatedCost": 30,
+                  "meal": null
+                },
+                {
+                  "name": "磁器口古镇毛血旺餐馆",
+                  "address": "沙坪坝区磁器口正街",
+                  "category": "food",
+                  "startTime": "12:20",
+                  "durationMinutes": 70,
+                  "estimatedCost": 60,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "红岩革命纪念馆",
+                  "address": "渝中区红岩村52号",
+                  "category": "attraction",
+                  "startTime": "14:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "李子坝梁山鸡（李子坝店）",
+                  "address": "渝中区李子坝正街",
+                  "category": "food",
+                  "startTime": "17:30",
+                  "durationMinutes": 80,
+                  "estimatedCost": 90,
+                  "meal": "dinner"
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 11,
+          "stopsByDay": [
+            6,
+            5
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 7,
+          "factualAccuracy": 0.6363636363636364,
+          "addressStops": 11,
+          "addressRate": 1,
+          "maxTravelMinutes": 43,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 80,
+            "passed": true,
+            "errors": 0,
+            "warnings": 2,
+            "codes": {
+              "DAY_OVERLOADED": 2
+            }
+          },
+          "estimatedSpend": 390,
+          "budget": 3000,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "unverifiedNames": [
+          "老四川大酒楼（解放碑店）",
+          "陈麻花（磁器口总店）",
+          "磁器口古镇毛血旺餐馆",
+          "李子坝梁山鸡（李子坝店）"
+        ],
+        "unknownTravelHops": 6,
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 2969,
+          "beforeIssues": 2,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "cq-002",
+      "city": "重庆",
+      "prompt": "两个人重庆一日游，预算800，想看夜景、吃火锅和小面",
+      "pipeline": {
+        "ms": 5244,
+        "tripId": "69c43b8c-3d16-4876-9b2c-6fe862c58e07",
+        "revision": 1,
+        "metrics": {
+          "days": 1,
+          "totalStops": 7,
+          "stopsByDay": [
+            7
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 1,
+          "mealCoverage": 1,
+          "factualStops": 7,
+          "factualAccuracy": 1,
+          "addressStops": 7,
+          "addressRate": 1,
+          "maxTravelMinutes": 31,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 90,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1
+            }
+          },
+          "estimatedSpend": 680,
+          "budget": 800,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "warnings": [
+          "Route 洪崖洞民俗风貌区 → 洪崖洞夜景观景台 uses Haversine estimation"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": null,
+          "ms": 3,
+          "beforeIssues": 1,
+          "afterIssues": 1,
+          "inventedPlaces": [],
+          "note": "没有可自动修复的问题"
+        }
+      },
+      "baseline": {
+        "ms": 1782,
+        "plan": {
+          "title": "重庆一日游：小面、火锅与山城夜景",
+          "dayPlans": [
+            {
+              "title": "渝中半岛经典一日：小面、老街、火锅与夜景",
+              "stops": [
+                {
+                  "name": "花市豌杂面（较场口店）",
+                  "address": "渝中区较场口民生路9号",
+                  "category": "food",
+                  "startTime": "09:00",
+                  "durationMinutes": 45,
+                  "estimatedCost": 20,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "解放碑步行街",
+                  "address": "渝中区民族路177号",
+                  "category": "shopping",
+                  "startTime": "10:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0
+                },
+                {
+                  "name": "洪崖洞民俗风貌区",
+                  "address": "渝中区嘉陵江滨江路88号",
+                  "category": "attraction",
+                  "startTime": "12:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0
+                },
+                {
+                  "name": "珮姐老火锅（洪崖洞店）",
+                  "address": "渝中区沧白路2号",
+                  "category": "food",
+                  "startTime": "17:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 150,
+                  "meal": "dinner"
+                },
+                {
+                  "name": "千厮门嘉陵江大桥",
+                  "address": "渝中区千厮门大桥",
+                  "category": "viewpoint",
+                  "startTime": "19:45",
+                  "durationMinutes": 60,
+                  "estimatedCost": 0
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 1,
+          "totalStops": 5,
+          "stopsByDay": [
+            5
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 1,
+          "mealCoverage": 1,
+          "factualStops": 4,
+          "factualAccuracy": 0.8,
+          "addressStops": 5,
+          "addressRate": 1,
+          "maxTravelMinutes": 11,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 90,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1
+            }
+          },
+          "estimatedSpend": 170,
+          "budget": 800,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "unverifiedNames": [
+          "花市豌杂面（较场口店）"
+        ],
+        "unknownTravelHops": 1,
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 1460,
+          "beforeIssues": 1,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "cd-003",
+      "city": "成都",
+      "prompt": "小两口成都两天，预算2500，必去大熊猫基地，喜欢美食和慢生活",
+      "pipeline": {
+        "ms": 5228,
+        "tripId": "e9f9dd69-0d4b-4f24-a15a-ecb576ed1dc6",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 8,
+          "factualAccuracy": 1,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 39,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 100,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0,
+            "codes": {}
+          },
+          "estimatedSpend": 2126,
+          "budget": 2500,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "warnings": [
+          "未能在 provider 候选中匹配必去地点：大熊猫"
+        ],
+        "repair": {
+          "attempted": false,
+          "success": null,
+          "ms": 0,
+          "beforeIssues": 0,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      },
+      "baseline": {
+        "ms": 3244,
+        "plan": {
+          "title": "成都两日慢生活：熊猫、美食与茶馆",
+          "dayPlans": [
+            {
+              "title": "第一天：熊猫基地与老成都慢生活",
+              "stops": [
+                {
+                  "name": "成都大熊猫繁育研究基地",
+                  "address": "成华区熊猫大道1375号",
+                  "category": "attraction",
+                  "startTime": "08:00",
+                  "durationMinutes": 180,
+                  "estimatedCost": 55,
+                  "meal": null
+                },
+                {
+                  "name": "陈麻婆豆腐（青羊正街店）",
+                  "address": "青羊区青羊正街141号",
+                  "category": "food",
+                  "startTime": "12:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 60,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "人民公园鹤鸣茶社",
+                  "address": "青羊区少城路12号人民公园内",
+                  "category": "cafe",
+                  "startTime": "14:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 40,
+                  "meal": null
+                },
+                {
+                  "name": "宽窄巷子",
+                  "address": "青羊区金河路口宽窄巷子",
+                  "category": "attraction",
+                  "startTime": "16:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "马路边边麻辣烫（致民路店）",
+                  "address": "武侯区致民路48号",
+                  "category": "food",
+                  "startTime": "18:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 80,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "第二天：市井美食与锦里慢游",
+              "stops": [
+                {
+                  "name": "文殊院",
+                  "address": "青羊区文殊院街66号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "洞子口张老二凉粉（文殊院店）",
+                  "address": "青羊区文殊院街39号",
+                  "category": "food",
+                  "startTime": "10:45",
+                  "durationMinutes": 45,
+                  "estimatedCost": 25,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "武侯祠",
+                  "address": "武侯区武侯祠大街231号",
+                  "category": "attraction",
+                  "startTime": "12:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 50,
+                  "meal": null
+                },
+                {
+                  "name": "锦里古街",
+                  "address": "武侯区武侯祠大街231号附1号",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "小龙坎火锅（春熙路店）",
+                  "address": "锦江区春熙路南段",
+                  "category": "food",
+                  "startTime": "17:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 120,
+                  "meal": "dinner"
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 10,
+          "stopsByDay": [
+            5,
+            5
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 8,
+          "factualAccuracy": 0.8,
+          "addressStops": 10,
+          "addressRate": 1,
+          "maxTravelMinutes": 222,
+          "travelAssessed": false,
+          "severeTravel": true,
+          "validation": {
+            "score": 20,
+            "passed": false,
+            "errors": 2,
+            "warnings": 3,
+            "codes": {
+              "DAY_OVERLOADED": 2,
+              "TRAVEL_TOO_LONG": 2,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 430,
+          "budget": 2500,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 222min > 60min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "马路边边麻辣烫（致民路店）",
+          "小龙坎火锅（春熙路店）"
+        ],
+        "unknownTravelHops": 2,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 2059,
+          "beforeIssues": 5,
+          "afterIssues": 5,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "xa-004",
+      "city": "西安",
+      "prompt": "一家三口西安两天，预算3000，想认真看历史，兵马俑一定要去，尽量少走路",
+      "pipeline": {
+        "ms": 5560,
+        "tripId": "a1ffe17e-5deb-40e5-8ead-ab9133300cba",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            5,
+            3
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 8,
+          "factualAccuracy": 1,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 36,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 90,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1
+            }
+          },
+          "estimatedSpend": 2551,
+          "budget": 3000,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "warnings": [
+          "未能在 provider 候选中匹配必去地点：兵马俑",
+          "Route 大明宫国家遗址公园 → 福苗小骆驼烧烤(凤八店) uses Haversine estimation",
+          "Day 2 移除了重复地点",
+          "Day 2 补入候选地点"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": null,
+          "ms": 3,
+          "beforeIssues": 1,
+          "afterIssues": 1,
+          "inventedPlaces": [],
+          "note": "没有可自动修复的问题"
+        }
+      },
+      "baseline": {
+        "ms": 2139,
+        "plan": {
+          "title": "西安两日历史文化轻松游（含兵马俑）",
+          "dayPlans": [
+            {
+              "title": "第一天：兵马俑与华清宫历史线",
+              "stops": [
+                {
+                  "name": "秦始皇兵马俑博物馆",
+                  "address": "西安市临潼区秦陵北路",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 180,
+                  "estimatedCost": 120,
+                  "meal": null
+                },
+                {
+                  "name": "魏家凉皮（临潼店）",
+                  "address": "西安市临潼区秦唐大道",
+                  "category": "food",
+                  "startTime": "12:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 30,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "华清宫",
+                  "address": "西安市临潼区华清路38号",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 150,
+                  "estimatedCost": 120,
+                  "meal": null
+                },
+                {
+                  "name": "西安饭庄（东大街店）",
+                  "address": "西安市碑林区东大街298号",
+                  "category": "food",
+                  "startTime": "18:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 80,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "第二天：古城墙与博物馆历史线",
+              "stops": [
+                {
+                  "name": "陕西历史博物馆",
+                  "address": "西安市雁塔区小寨东路91号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 180,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "子午路张记肉夹馍（小寨店）",
+                  "address": "西安市雁塔区小寨西路",
+                  "category": "food",
+                  "startTime": "12:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 25,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "西安城墙（永宁门）",
+                  "address": "西安市碑林区南大街2号",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 54,
+                  "meal": null
+                },
+                {
+                  "name": "回民街",
+                  "address": "西安市莲湖区北院门",
+                  "category": "food",
+                  "startTime": "17:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 60,
+                  "meal": "dinner"
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 5,
+          "factualAccuracy": 0.625,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 36,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 90,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1
+            }
+          },
+          "estimatedSpend": 489,
+          "budget": 3000,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "unverifiedNames": [
+          "魏家凉皮（临潼店）",
+          "西安饭庄（东大街店）",
+          "子午路张记肉夹馍（小寨店）"
+        ],
+        "unknownTravelHops": 5,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 1788,
+          "beforeIssues": 1,
+          "afterIssues": 1,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "hz-005",
+      "city": "杭州",
+      "prompt": "带孩子去杭州两天，预算4000，想亲近自然又不太累，最好有适合小朋友的地方",
+      "pipeline": {
+        "ms": 4419,
+        "tripId": "dacc4291-fb44-4fd9-9ccf-08faddce60ca",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 6,
+          "stopsByDay": [
+            3,
+            3
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 6,
+          "factualAccuracy": 1,
+          "addressStops": 6,
+          "addressRate": 1,
+          "maxTravelMinutes": 93,
+          "travelAssessed": true,
+          "severeTravel": true,
+          "validation": {
+            "score": 50,
+            "passed": false,
+            "errors": 2,
+            "warnings": 0,
+            "codes": {
+              "TRAVEL_TOO_LONG": 2
+            }
+          },
+          "estimatedSpend": 3400,
+          "budget": 4000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 93min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [
+          "Route 吴山景区 → 清河坊历史文化特色街区 uses Haversine estimation",
+          "相邻地点交通约 78 分钟，超过上限 60 分钟",
+          "相邻地点交通约 93 分钟，超过上限 60 分钟"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 37,
+          "beforeIssues": 2,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      },
+      "baseline": {
+        "ms": 1835,
+        "plan": {
+          "title": "杭州亲子两日自然轻松游",
+          "dayPlans": [
+            {
+              "title": "西湖游船与花港观鱼",
+              "stops": [
+                {
+                  "name": "西湖游船（湖滨码头）",
+                  "address": "湖滨路",
+                  "category": "activity",
+                  "startTime": "09:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 70,
+                  "meal": null
+                },
+                {
+                  "name": "楼外楼（孤山路店）",
+                  "address": "孤山路30号",
+                  "category": "food",
+                  "startTime": "11:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 150,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "花港观鱼",
+                  "address": "西山路",
+                  "category": "attraction",
+                  "startTime": "13:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "苏堤",
+                  "address": "苏堤",
+                  "category": "viewpoint",
+                  "startTime": "16:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                }
+              ]
+            },
+            {
+              "title": "植物园与动物园亲子日",
+              "stops": [
+                {
+                  "name": "杭州植物园",
+                  "address": "桃源岭1号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 10,
+                  "meal": null
+                },
+                {
+                  "name": "杭州动物园",
+                  "address": "虎跑路40号",
+                  "category": "attraction",
+                  "startTime": "11:30",
+                  "durationMinutes": 180,
+                  "estimatedCost": 20,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "虎跑公园",
+                  "address": "虎跑路39号",
+                  "category": "attraction",
+                  "startTime": "15:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 15,
+                  "meal": null
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 7,
+          "stopsByDay": [
+            4,
+            3
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 6,
+          "factualAccuracy": 0.8571428571428571,
+          "addressStops": 7,
+          "addressRate": 1,
+          "maxTravelMinutes": 87,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 55,
+            "passed": false,
+            "errors": 1,
+            "warnings": 2,
+            "codes": {
+              "DAY_OVERLOADED": 1,
+              "TRAVEL_TOO_LONG": 1,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 265,
+          "budget": 4000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 87min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "西湖游船（湖滨码头）"
+        ],
+        "unknownTravelHops": 1,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 1881,
+          "beforeIssues": 3,
+          "afterIssues": 3,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "xm-006",
+      "city": "厦门",
+      "prompt": "情侣厦门两天，预算3000，想看海、逛文艺街区、喝咖啡",
+      "pipeline": {
+        "ms": 5844,
+        "tripId": "c0e21dc6-1180-4ba3-ab72-43d17aff5c4c",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 9,
+          "stopsByDay": [
+            5,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 9,
+          "factualAccuracy": 1,
+          "addressStops": 9,
+          "addressRate": 1,
+          "maxTravelMinutes": 50,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 80,
+            "passed": true,
+            "errors": 0,
+            "warnings": 2,
+            "codes": {
+              "DAY_OVERLOADED": 2
+            }
+          },
+          "estimatedSpend": 2551,
+          "budget": 3000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 50min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [
+          "Route 売Mai Coffee → 阿季海鲜酒食(官任路店) uses Haversine estimation"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": null,
+          "ms": 4,
+          "beforeIssues": 2,
+          "afterIssues": 2,
+          "inventedPlaces": [],
+          "note": "没有可自动修复的问题"
+        }
+      },
+      "baseline": {
+        "ms": 2181,
+        "plan": {
+          "title": "厦门情侣两日：看海·文艺街区·咖啡慢游",
+          "dayPlans": [
+            {
+              "title": "第一天：环岛路看海与文艺渔村",
+              "stops": [
+                {
+                  "name": "黄厝海滩",
+                  "address": "思明区环岛南路黄厝段",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0
+                },
+                {
+                  "name": "临家闽南菜（环岛路店）",
+                  "address": "思明区环岛南路",
+                  "category": "food",
+                  "startTime": "12:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 120,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "曾厝垵文创村",
+                  "address": "思明区曾厝垵社",
+                  "category": "activity",
+                  "startTime": "14:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 30
+                },
+                {
+                  "name": "不在书店（曾厝垵店）",
+                  "address": "思明区曾厝垵",
+                  "category": "cafe",
+                  "startTime": "16:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 50
+                }
+              ]
+            },
+            {
+              "title": "第二天：沙坡尾文艺街区与鼓浪屿海景",
+              "stops": [
+                {
+                  "name": "沙坡尾艺术西区",
+                  "address": "思明区沙坡尾",
+                  "category": "activity",
+                  "startTime": "09:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0
+                },
+                {
+                  "name": "thank you cafe（沙坡尾店）",
+                  "address": "思明区沙坡尾",
+                  "category": "cafe",
+                  "startTime": "11:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 45
+                },
+                {
+                  "name": "鹭江宾馆观海餐厅",
+                  "address": "思明区鹭江道54号",
+                  "category": "food",
+                  "startTime": "13:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 150,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "鼓浪屿（轮渡登岛漫步）",
+                  "address": "思明区鼓浪屿",
+                  "category": "attraction",
+                  "startTime": "15:00",
+                  "durationMinutes": 180,
+                  "estimatedCost": 35
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 6,
+          "factualAccuracy": 0.75,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 65,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 65,
+            "passed": false,
+            "errors": 1,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1,
+              "TRAVEL_TOO_LONG": 1
+            }
+          },
+          "estimatedSpend": 430,
+          "budget": 3000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 65min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "不在书店（曾厝垵店）",
+          "鼓浪屿（轮渡登岛漫步）"
+        ],
+        "unknownTravelHops": 2,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 1840,
+          "beforeIssues": 2,
+          "afterIssues": 2,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "dl-007",
+      "city": "大理",
+      "prompt": "一个人去大理两天，预算1500，想放松、看洱海、找咖啡馆发呆",
+      "pipeline": {
+        "ms": 5032,
+        "tripId": "703b9e8a-e7fd-4987-9632-7ce8d9792221",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 8,
+          "factualAccuracy": 1,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 68,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 75,
+            "passed": false,
+            "errors": 1,
+            "warnings": 0,
+            "codes": {
+              "TRAVEL_TOO_LONG": 1
+            }
+          },
+          "estimatedSpend": 1276,
+          "budget": 1500,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 68min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [
+          "Route 馥咖咖啡 → 喂咖食堂(建标华城海琴湾店) uses Haversine estimation",
+          "相邻地点交通约 68 分钟，超过上限 60 分钟"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 39,
+          "beforeIssues": 1,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      },
+      "baseline": {
+        "ms": 2400,
+        "plan": {
+          "title": "大理两日慢游：洱海与咖啡馆的独处时光",
+          "dayPlans": [
+            {
+              "title": "第一天：古城漫步与洱海西岸咖啡",
+              "stops": [
+                {
+                  "name": "大理古城",
+                  "address": "大理市大理镇复兴路",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "人民路咖啡馆（古城店）",
+                  "address": "大理市大理镇人民路",
+                  "category": "cafe",
+                  "startTime": "12:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 45,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "才村码头",
+                  "address": "大理市大理镇才村",
+                  "category": "viewpoint",
+                  "startTime": "14:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "龙龛码头",
+                  "address": "大理市大理镇龙龛村",
+                  "category": "viewpoint",
+                  "startTime": "16:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                }
+              ]
+            },
+            {
+              "title": "第二天：喜洲古镇与海舌公园",
+              "stops": [
+                {
+                  "name": "喜洲古镇",
+                  "address": "大理市喜洲镇",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "喜洲破酥粑粑（古镇内摊位）",
+                  "address": "大理市喜洲镇",
+                  "category": "food",
+                  "startTime": "11:45",
+                  "durationMinutes": 45,
+                  "estimatedCost": 15,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "海舌生态公园",
+                  "address": "大理市喜洲镇金河村",
+                  "category": "viewpoint",
+                  "startTime": "13:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "喜洲古镇咖啡馆",
+                  "address": "大理市喜洲镇",
+                  "category": "cafe",
+                  "startTime": "15:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 40,
+                  "meal": null
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 6,
+          "factualAccuracy": 0.75,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 261,
+          "travelAssessed": false,
+          "severeTravel": true,
+          "validation": {
+            "score": 30,
+            "passed": false,
+            "errors": 2,
+            "warnings": 2,
+            "codes": {
+              "DAY_OVERLOADED": 1,
+              "TRAVEL_TOO_LONG": 2,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 100,
+          "budget": 1500,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 261min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "人民路咖啡馆（古城店）",
+          "喜洲古镇咖啡馆"
+        ],
+        "unknownTravelHops": 3,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 1740,
+          "beforeIssues": 4,
+          "afterIssues": 4,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "bj-008",
+      "city": "北京",
+      "prompt": "带老人一家四口北京三天，预算6000，想看故宫和经典历史景点，走路要少",
+      "pipeline": {
+        "ms": 4867,
+        "tripId": "43eae98c-b073-4cec-8dc1-6e239628acc8",
+        "revision": 1,
+        "metrics": {
+          "days": 3,
+          "totalStops": 9,
+          "stopsByDay": [
+            3,
+            3,
+            3
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 3,
+          "mealCoverage": 1,
+          "factualStops": 9,
+          "factualAccuracy": 1,
+          "addressStops": 9,
+          "addressRate": 1,
+          "maxTravelMinutes": 77,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 75,
+            "passed": false,
+            "errors": 1,
+            "warnings": 0,
+            "codes": {
+              "TRAVEL_TOO_LONG": 1
+            }
+          },
+          "estimatedSpend": 5100,
+          "budget": 6000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 77min > 75min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [
+          "Route 天坛公园 → 方砖厂69号炸酱面(崇文门店) uses Haversine estimation",
+          "Route 方砖厂69号炸酱面(崇文门店) → 北京大栅栏 uses Haversine estimation",
+          "相邻地点交通约 77 分钟，超过上限 60 分钟"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 38,
+          "beforeIssues": 1,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      },
+      "baseline": {
+        "ms": 3081,
+        "plan": {
+          "title": "北京三日历史文化轻松游（含故宫·少步行·适老版）",
+          "dayPlans": [
+            {
+              "title": "第一天：故宫深度游与景山俯瞰",
+              "stops": [
+                {
+                  "name": "故宫博物院",
+                  "address": "东城区景山前街4号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 210,
+                  "estimatedCost": 60,
+                  "meal": null
+                },
+                {
+                  "name": "四季民福烤鸭店（故宫店）",
+                  "address": "东城区南池子大街11号",
+                  "category": "food",
+                  "startTime": "12:45",
+                  "durationMinutes": 75,
+                  "estimatedCost": 150,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "景山公园",
+                  "address": "西城区景山西街44号",
+                  "category": "attraction",
+                  "startTime": "14:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 2,
+                  "meal": null
+                },
+                {
+                  "name": "前门大街",
+                  "address": "东城区前门大街",
+                  "category": "shopping",
+                  "startTime": "16:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                }
+              ]
+            },
+            {
+              "title": "第二天：天坛祈福与皇家园林",
+              "stops": [
+                {
+                  "name": "天坛公园",
+                  "address": "东城区天坛东里甲1号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 150,
+                  "estimatedCost": 34,
+                  "meal": null
+                },
+                {
+                  "name": "老磁器口豆汁店（天坛店）",
+                  "address": "东城区天坛北里5号楼",
+                  "category": "food",
+                  "startTime": "11:45",
+                  "durationMinutes": 60,
+                  "estimatedCost": 30,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "颐和园",
+                  "address": "海淀区新建宫门路19号",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 180,
+                  "estimatedCost": 30,
+                  "meal": null
+                },
+                {
+                  "name": "那家小馆（颐和园店）",
+                  "address": "海淀区颐和园路8号",
+                  "category": "food",
+                  "startTime": "17:30",
+                  "durationMinutes": 75,
+                  "estimatedCost": 120,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "第三天：长城雄关与奥运地标",
+              "stops": [
+                {
+                  "name": "八达岭长城",
+                  "address": "延庆区G6京藏高速58号出口",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 180,
+                  "estimatedCost": 40,
+                  "meal": null
+                },
+                {
+                  "name": "长城人家农家院",
+                  "address": "延庆区八达岭镇岔道村",
+                  "category": "food",
+                  "startTime": "12:30",
+                  "durationMinutes": 75,
+                  "estimatedCost": 60,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "奥林匹克公园",
+                  "address": "朝阳区北辰东路15号",
+                  "category": "attraction",
+                  "startTime": "15:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "鸟巢文化中心餐厅",
+                  "address": "朝阳区国家体育场南路1号",
+                  "category": "food",
+                  "startTime": "18:00",
+                  "durationMinutes": 75,
+                  "estimatedCost": 100,
+                  "meal": "dinner"
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 3,
+          "totalStops": 12,
+          "stopsByDay": [
+            4,
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 3,
+          "mealCoverage": 1,
+          "factualStops": 9,
+          "factualAccuracy": 0.75,
+          "addressStops": 12,
+          "addressRate": 1,
+          "maxTravelMinutes": 289,
+          "travelAssessed": false,
+          "severeTravel": true,
+          "validation": {
+            "score": 45,
+            "passed": false,
+            "errors": 1,
+            "warnings": 3,
+            "codes": {
+              "DAY_OVERLOADED": 2,
+              "TRAVEL_TOO_LONG": 1,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 626,
+          "budget": 6000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 289min > 75min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "那家小馆（颐和园店）",
+          "长城人家农家院",
+          "鸟巢文化中心餐厅"
+        ],
+        "unknownTravelHops": 4,
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 2451,
+          "beforeIssues": 4,
+          "afterIssues": 3,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "sh-009",
+      "city": "上海",
+      "prompt": "上海两天，两个人预算3500，想看艺术展、逛老街区、吃好吃的",
+      "pipeline": {
+        "ms": 5537,
+        "tripId": "741f0d9d-1b66-4f36-989a-9143bc58b321",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 12,
+          "stopsByDay": [
+            6,
+            6
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 12,
+          "factualAccuracy": 1,
+          "addressStops": 12,
+          "addressRate": 1,
+          "maxTravelMinutes": 35,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 80,
+            "passed": true,
+            "errors": 0,
+            "warnings": 2,
+            "codes": {
+              "DAY_OVERLOADED": 2
+            }
+          },
+          "estimatedSpend": 2952,
+          "budget": 3500,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "warnings": [
+          "Route 南京路步行街 → 上海世茂广场 uses Haversine estimation",
+          "Route 上海世茂广场 → 海底捞火锅(世茂广场店) uses Haversine estimation",
+          "Route 上海k11购物艺术中心 → 上海新天地 uses Haversine estimation",
+          "Route 上海豫园 → 上海城隍庙 uses Haversine estimation"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": null,
+          "ms": 3,
+          "beforeIssues": 2,
+          "afterIssues": 2,
+          "inventedPlaces": [],
+          "note": "没有可自动修复的问题"
+        }
+      },
+      "baseline": {
+        "ms": 2257,
+        "plan": {
+          "title": "上海两日艺术漫步与美食之旅",
+          "dayPlans": [
+            {
+              "title": "西岸艺术与法租界漫步",
+              "stops": [
+                {
+                  "name": "龙美术馆（西岸馆）",
+                  "address": "徐汇区龙腾大道3398号",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 100,
+                  "meal": null
+                },
+                {
+                  "name": "西岸艺术中心",
+                  "address": "徐汇区龙腾大道2555号",
+                  "category": "attraction",
+                  "startTime": "12:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 80,
+                  "meal": null
+                },
+                {
+                  "name": "武康路",
+                  "address": "徐汇区武康路",
+                  "category": "activity",
+                  "startTime": "14:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "老吉士酒家（天平路店）",
+                  "address": "徐汇区天平路41号",
+                  "category": "food",
+                  "startTime": "17:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 200,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "外滩艺术与老城厢美食",
+              "stops": [
+                {
+                  "name": "上海当代艺术博物馆",
+                  "address": "黄浦区苗江路678号",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 60,
+                  "meal": null
+                },
+                {
+                  "name": "田子坊",
+                  "address": "黄浦区泰康路210弄",
+                  "category": "activity",
+                  "startTime": "12:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "上海老饭店",
+                  "address": "黄浦区福佑路242号",
+                  "category": "food",
+                  "startTime": "13:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 180,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "外滩",
+                  "address": "黄浦区中山东一路",
+                  "category": "viewpoint",
+                  "startTime": "16:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 7,
+          "factualAccuracy": 0.875,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 76,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 45,
+            "passed": false,
+            "errors": 1,
+            "warnings": 3,
+            "codes": {
+              "DAY_OVERLOADED": 2,
+              "TRAVEL_TOO_LONG": 1,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 620,
+          "budget": 3500,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 76min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "老吉士酒家（天平路店）"
+        ],
+        "unknownTravelHops": 1,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 2149,
+          "beforeIssues": 4,
+          "afterIssues": 4,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "gz-010",
+      "city": "广州",
+      "prompt": "三个朋友广州两天，预算2500，重点早茶和本地历史，不想太赶",
+      "pipeline": {
+        "ms": 5844,
+        "tripId": "17876e15-2cae-4bd3-86f0-932c00806941",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 9,
+          "stopsByDay": [
+            5,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 9,
+          "factualAccuracy": 1,
+          "addressStops": 9,
+          "addressRate": 1,
+          "maxTravelMinutes": 32,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 90,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1
+            }
+          },
+          "estimatedSpend": 2126,
+          "budget": 2500,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "warnings": [
+          "Route 大佛寺 → 点都德(北京路贰店) uses Haversine estimation",
+          "Route 点都德(北京路贰店) → 南越王博物院(王宫展区) uses Haversine estimation",
+          "Route 南越王博物院(王宫展区) → 光明广场 uses Haversine estimation"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": null,
+          "ms": 3,
+          "beforeIssues": 1,
+          "afterIssues": 1,
+          "inventedPlaces": [],
+          "note": "没有可自动修复的问题"
+        }
+      },
+      "baseline": {
+        "ms": 2921,
+        "plan": {
+          "title": "广州两日慢游：早茶与老城历史",
+          "dayPlans": [
+            {
+              "title": "第一天：西关早茶与荔湾旧事",
+              "stops": [
+                {
+                  "name": "陶陶居酒家（第十甫路总店）",
+                  "address": "荔湾区第十甫路20号",
+                  "category": "food",
+                  "startTime": "09:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 80,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "陈家祠（广东民间工艺博物馆）",
+                  "address": "荔湾区中山七路恩龙里34号",
+                  "category": "attraction",
+                  "startTime": "11:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 10
+                },
+                {
+                  "name": "永庆坊",
+                  "address": "荔湾区恩宁路99号",
+                  "category": "attraction",
+                  "startTime": "13:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0
+                },
+                {
+                  "name": "粤剧艺术博物馆",
+                  "address": "荔湾区恩宁路127号",
+                  "category": "attraction",
+                  "startTime": "16:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0
+                }
+              ]
+            },
+            {
+              "title": "第二天：越秀古迹与北京路",
+              "stops": [
+                {
+                  "name": "点都德（聚福楼店）",
+                  "address": "越秀区惠福东路470号",
+                  "category": "food",
+                  "startTime": "09:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 70,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "南越王博物院（王墓展区）",
+                  "address": "越秀区解放北路867号",
+                  "category": "attraction",
+                  "startTime": "11:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 12
+                },
+                {
+                  "name": "越秀公园（五羊石像、镇海楼）",
+                  "address": "越秀区解放北路988号",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 10
+                },
+                {
+                  "name": "北京路步行街",
+                  "address": "越秀区北京路",
+                  "category": "shopping",
+                  "startTime": "16:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 50
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 8,
+          "factualAccuracy": 1,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 40,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 90,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1
+            }
+          },
+          "estimatedSpend": 232,
+          "budget": 2500,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "unverifiedNames": [],
+        "unknownTravelHops": 0,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 2080,
+          "beforeIssues": 1,
+          "afterIssues": 1,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "sz-011",
+      "city": "苏州",
+      "prompt": "两个人苏州两天，预算2000，想看园林和古镇，节奏慢一点",
+      "pipeline": {
+        "ms": 6279,
+        "tripId": "447b6d1a-94e5-4c76-a114-98e19d6657a4",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 8,
+          "factualAccuracy": 1,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 54,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 100,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0,
+            "codes": {}
+          },
+          "estimatedSpend": 1700,
+          "budget": 2000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 54min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [],
+        "repair": {
+          "attempted": false,
+          "success": null,
+          "ms": 0,
+          "beforeIssues": 0,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      },
+      "baseline": {
+        "ms": 2206,
+        "plan": {
+          "title": "苏州两日慢游：园林与古镇",
+          "dayPlans": [
+            {
+              "title": "第一天：经典园林与古街漫步",
+              "stops": [
+                {
+                  "name": "拙政园",
+                  "address": "苏州市姑苏区东北街178号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 150,
+                  "estimatedCost": 80,
+                  "meal": null
+                },
+                {
+                  "name": "苏州博物馆",
+                  "address": "苏州市姑苏区东北街204号",
+                  "category": "attraction",
+                  "startTime": "12:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "平江路历史街区",
+                  "address": "苏州市姑苏区平江路",
+                  "category": "food",
+                  "startTime": "14:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 60,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "耦园",
+                  "address": "苏州市姑苏区仓街小新桥巷6号",
+                  "category": "attraction",
+                  "startTime": "16:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 25,
+                  "meal": null
+                }
+              ]
+            },
+            {
+              "title": "第二天：水乡古镇慢时光",
+              "stops": [
+                {
+                  "name": "同里古镇",
+                  "address": "苏州市吴江区同里镇",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 180,
+                  "estimatedCost": 100,
+                  "meal": null
+                },
+                {
+                  "name": "同里古镇内餐馆（午餐）",
+                  "address": "苏州市吴江区同里镇",
+                  "category": "food",
+                  "startTime": "12:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 60,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "退思园",
+                  "address": "苏州市吴江区同里镇新填街234号",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 30,
+                  "meal": null
+                },
+                {
+                  "name": "三桥景区",
+                  "address": "苏州市吴江区同里镇",
+                  "category": "viewpoint",
+                  "startTime": "15:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 0,
+                  "meal": null
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 6,
+          "factualAccuracy": 0.75,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 20,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 100,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0,
+            "codes": {}
+          },
+          "estimatedSpend": 355,
+          "budget": 2000,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "unverifiedNames": [
+          "同里古镇内餐馆（午餐）",
+          "三桥景区"
+        ],
+        "unknownTravelHops": 3,
+        "repair": {
+          "attempted": false,
+          "success": null,
+          "ms": 0,
+          "beforeIssues": 0,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "nj-012",
+      "city": "南京",
+      "prompt": "南京两天，两个人预算2000，想看历史和吃小吃，行程别太满",
+      "pipeline": {
+        "ms": 4757,
+        "tripId": "774968a0-74ad-4071-86e8-ed94b0a65c0a",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 8,
+          "factualAccuracy": 1,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 45,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 100,
+            "passed": true,
+            "errors": 0,
+            "warnings": 0,
+            "codes": {}
+          },
+          "estimatedSpend": 1700,
+          "budget": 2000,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "warnings": [],
+        "repair": {
+          "attempted": false,
+          "success": null,
+          "ms": 0,
+          "beforeIssues": 0,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      },
+      "baseline": {
+        "ms": 2754,
+        "plan": {
+          "title": "南京两日·历史与小吃慢行",
+          "dayPlans": [
+            {
+              "title": "第一天：钟山怀古与秦淮夜色",
+              "stops": [
+                {
+                  "name": "中山陵",
+                  "address": "玄武区石象路7号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 150,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "南京大牌档（中山陵店）",
+                  "address": "玄武区中山门大街9号",
+                  "category": "food",
+                  "startTime": "12:00",
+                  "durationMinutes": 75,
+                  "estimatedCost": 80,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "南京博物院",
+                  "address": "玄武区中山东路321号",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 150,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "夫子庙秦淮风光带",
+                  "address": "秦淮区贡院街",
+                  "category": "attraction",
+                  "startTime": "17:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "莲湖糕团店",
+                  "address": "秦淮区贡院西街24号",
+                  "category": "food",
+                  "startTime": "19:30",
+                  "durationMinutes": 45,
+                  "estimatedCost": 30,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "第二天：民国记忆与老门东小吃",
+              "stops": [
+                {
+                  "name": "总统府",
+                  "address": "玄武区长江路292号",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 40,
+                  "meal": null
+                },
+                {
+                  "name": "鸡鸣汤包（长江路店）",
+                  "address": "玄武区长江路",
+                  "category": "food",
+                  "startTime": "12:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 35,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "侵华日军南京大屠杀遇难同胞纪念馆",
+                  "address": "建邺区水西门大街418号",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "老门东历史街区",
+                  "address": "秦淮区剪子巷",
+                  "category": "attraction",
+                  "startTime": "17:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "蒋有记锅贴（老门东店）",
+                  "address": "秦淮区老门东三条营",
+                  "category": "food",
+                  "startTime": "19:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 40,
+                  "meal": "dinner"
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 10,
+          "stopsByDay": [
+            5,
+            5
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 7,
+          "factualAccuracy": 0.7,
+          "addressStops": 10,
+          "addressRate": 1,
+          "maxTravelMinutes": 80,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 20,
+            "passed": false,
+            "errors": 2,
+            "warnings": 3,
+            "codes": {
+              "DAY_OVERLOADED": 2,
+              "TRAVEL_TOO_LONG": 2,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 225,
+          "budget": 2000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 80min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "南京大牌档（中山陵店）",
+          "鸡鸣汤包（长江路店）",
+          "蒋有记锅贴（老门东店）"
+        ],
+        "unknownTravelHops": 5,
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 2764,
+          "beforeIssues": 5,
+          "afterIssues": 2,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "wh-013",
+      "city": "武汉",
+      "prompt": "武汉一日游，两个人预算800，想吃热干面、看江景和黄鹤楼",
+      "pipeline": {
+        "ms": 4504,
+        "tripId": "142e9f31-3ff9-4e05-accb-9b9f2a723fc5",
+        "revision": 1,
+        "metrics": {
+          "days": 1,
+          "totalStops": 7,
+          "stopsByDay": [
+            7
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 1,
+          "mealCoverage": 1,
+          "factualStops": 7,
+          "factualAccuracy": 1,
+          "addressStops": 7,
+          "addressRate": 1,
+          "maxTravelMinutes": 73,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 65,
+            "passed": false,
+            "errors": 1,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1,
+              "TRAVEL_TOO_LONG": 1
+            }
+          },
+          "estimatedSpend": 680,
+          "budget": 800,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 73min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [
+          "Route 武昌江滩 → 武汉江滩1期(沿江大道) uses Haversine estimation",
+          "相邻地点交通约 73 分钟，超过上限 60 分钟"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 33,
+          "beforeIssues": 2,
+          "afterIssues": 1,
+          "inventedPlaces": []
+        }
+      },
+      "baseline": {
+        "ms": 2275,
+        "plan": {
+          "title": "武汉一日游：热干面·黄鹤楼·江景",
+          "dayPlans": [
+            {
+              "title": "武昌经典一日：过早、登楼、江滩夜景",
+              "stops": [
+                {
+                  "name": "蔡林记（户部巷店）",
+                  "address": "武昌区户部巷",
+                  "category": "food",
+                  "startTime": "09:00",
+                  "durationMinutes": 45,
+                  "estimatedCost": 20,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "黄鹤楼",
+                  "address": "武昌区蛇山西山坡特1号",
+                  "category": "attraction",
+                  "startTime": "10:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 70
+                },
+                {
+                  "name": "户部巷小吃街",
+                  "address": "武昌区户部巷",
+                  "category": "food",
+                  "startTime": "12:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 40,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "武汉长江大桥（武昌桥头堡）",
+                  "address": "武昌区临江大道",
+                  "category": "viewpoint",
+                  "startTime": "14:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 0
+                },
+                {
+                  "name": "汉口江滩",
+                  "address": "江岸区沿江大道",
+                  "category": "viewpoint",
+                  "startTime": "16:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0
+                },
+                {
+                  "name": "吉庆街",
+                  "address": "江岸区吉庆街",
+                  "category": "food",
+                  "startTime": "18:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 80,
+                  "meal": "dinner"
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 1,
+          "totalStops": 6,
+          "stopsByDay": [
+            6
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 1,
+          "mealCoverage": 1,
+          "factualStops": 5,
+          "factualAccuracy": 0.8333333333333334,
+          "addressStops": 6,
+          "addressRate": 1,
+          "maxTravelMinutes": 134,
+          "travelAssessed": false,
+          "severeTravel": true,
+          "validation": {
+            "score": 30,
+            "passed": false,
+            "errors": 2,
+            "warnings": 2,
+            "codes": {
+              "DAY_OVERLOADED": 1,
+              "TRAVEL_TOO_LONG": 2,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 210,
+          "budget": 800,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 134min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "户部巷小吃街"
+        ],
+        "unknownTravelHops": 2,
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 2150,
+          "beforeIssues": 4,
+          "afterIssues": 2,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "cs-014",
+      "city": "长沙",
+      "prompt": "两个年轻人长沙两天，预算1500，想体验夜生活和地道小吃，预算有点紧",
+      "pipeline": {
+        "ms": 5947,
+        "tripId": "10d0eef7-9ff4-46e7-a769-90cf33ae9691",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 9,
+          "stopsByDay": [
+            5,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 9,
+          "factualAccuracy": 1,
+          "addressStops": 9,
+          "addressRate": 1,
+          "maxTravelMinutes": 53,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 90,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1
+            }
+          },
+          "estimatedSpend": 1276,
+          "budget": 1500,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 53min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [
+          "Route 潮宗街区 → 特特面馆银安路店 uses Haversine estimation",
+          "Route 特特面馆银安路店 → 湖南省博物馆 uses Haversine estimation",
+          "Day 2 移除了重复地点"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": null,
+          "ms": 4,
+          "beforeIssues": 1,
+          "afterIssues": 1,
+          "inventedPlaces": [],
+          "note": "没有可自动修复的问题"
+        }
+      },
+      "baseline": {
+        "ms": 2490,
+        "plan": {
+          "title": "长沙两日：夜生活与地道小吃（紧凑预算版）",
+          "dayPlans": [
+            {
+              "title": "第一天：老城小吃与江边夜色",
+              "stops": [
+                {
+                  "name": "太平老街",
+                  "address": "天心区太平街",
+                  "category": "attraction",
+                  "startTime": "10:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "火宫殿（坡子街总店）",
+                  "address": "天心区坡子街127号",
+                  "category": "food",
+                  "startTime": "12:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 60,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "橘子洲景区",
+                  "address": "岳麓区橘子洲头",
+                  "category": "attraction",
+                  "startTime": "14:30",
+                  "durationMinutes": 150,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "超级文和友（海信广场店）",
+                  "address": "天心区湘江中路二段36号海信广场",
+                  "category": "food",
+                  "startTime": "18:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 80,
+                  "meal": "dinner"
+                },
+                {
+                  "name": "解放西路酒吧街",
+                  "address": "芙蓉区解放西路",
+                  "category": "activity",
+                  "startTime": "20:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 100,
+                  "meal": null
+                }
+              ]
+            },
+            {
+              "title": "第二天：岳麓山与南门口夜宵",
+              "stops": [
+                {
+                  "name": "岳麓山风景名胜区",
+                  "address": "岳麓区登高路",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 150,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "湖南大学小吃街",
+                  "address": "岳麓区麓山南路",
+                  "category": "food",
+                  "startTime": "12:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 40,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "湖南博物院",
+                  "address": "开福区东风路50号",
+                  "category": "attraction",
+                  "startTime": "14:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "南门口小吃街",
+                  "address": "天心区南门口",
+                  "category": "food",
+                  "startTime": "18:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 50,
+                  "meal": "dinner"
+                },
+                {
+                  "name": "化龙池清吧街",
+                  "address": "芙蓉区化龙池巷",
+                  "category": "activity",
+                  "startTime": "20:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 60,
+                  "meal": null
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 10,
+          "stopsByDay": [
+            5,
+            5
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 6,
+          "factualAccuracy": 0.6,
+          "addressStops": 10,
+          "addressRate": 1,
+          "maxTravelMinutes": 26,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 80,
+            "passed": true,
+            "errors": 0,
+            "warnings": 2,
+            "codes": {
+              "DAY_OVERLOADED": 2
+            }
+          },
+          "estimatedSpend": 390,
+          "budget": 1500,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "unverifiedNames": [
+          "解放西路酒吧街",
+          "湖南博物院",
+          "南门口小吃街",
+          "化龙池清吧街"
+        ],
+        "unknownTravelHops": 4,
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 1946,
+          "beforeIssues": 2,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "qd-015",
+      "city": "青岛",
+      "prompt": "一家三口青岛两天，预算3000，想看海、吃海鲜、逛逛老城区",
+      "pipeline": {
+        "ms": 5852,
+        "tripId": "c15c40f3-44fb-48be-a825-782586776a00",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 9,
+          "stopsByDay": [
+            4,
+            5
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 9,
+          "factualAccuracy": 1,
+          "addressStops": 9,
+          "addressRate": 1,
+          "maxTravelMinutes": 56,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 90,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1
+            }
+          },
+          "estimatedSpend": 2551,
+          "budget": 3000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 56min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [],
+        "repair": {
+          "attempted": true,
+          "success": null,
+          "ms": 3,
+          "beforeIssues": 1,
+          "afterIssues": 1,
+          "inventedPlaces": [],
+          "note": "没有可自动修复的问题"
+        }
+      },
+      "baseline": {
+        "ms": 2435,
+        "plan": {
+          "title": "青岛亲子两日：看海·海鲜·老城漫步",
+          "dayPlans": [
+            {
+              "title": "第一天：栈桥看海 · 老城寻踪 · 海鲜晚餐",
+              "stops": [
+                {
+                  "name": "栈桥",
+                  "address": "市南区太平路12号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "青岛天主教堂（圣弥厄尔教堂）",
+                  "address": "市南区浙江路15号",
+                  "category": "attraction",
+                  "startTime": "10:45",
+                  "durationMinutes": 60,
+                  "estimatedCost": 10,
+                  "meal": null
+                },
+                {
+                  "name": "劈柴院",
+                  "address": "市南区中山路",
+                  "category": "food",
+                  "startTime": "12:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 60,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "青岛啤酒博物馆",
+                  "address": "市北区登州路56号",
+                  "category": "attraction",
+                  "startTime": "14:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 60,
+                  "meal": null
+                },
+                {
+                  "name": "云霄路美食街",
+                  "address": "市南区云霄路",
+                  "category": "food",
+                  "startTime": "17:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 120,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "第二天：八大关漫步 · 海水浴场 · 五四广场",
+              "stops": [
+                {
+                  "name": "八大关风景区",
+                  "address": "市南区八大关",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "第二海水浴场",
+                  "address": "市南区山海关路",
+                  "category": "activity",
+                  "startTime": "11:15",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "老转村山东菜馆",
+                  "address": "市南区闽江路",
+                  "category": "food",
+                  "startTime": "13:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 80,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "五四广场",
+                  "address": "市南区东海西路",
+                  "category": "viewpoint",
+                  "startTime": "15:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "奥帆中心",
+                  "address": "市南区燕儿岛路1号",
+                  "category": "attraction",
+                  "startTime": "17:15",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 10,
+          "stopsByDay": [
+            5,
+            5
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 8,
+          "factualAccuracy": 0.8,
+          "addressStops": 10,
+          "addressRate": 1,
+          "maxTravelMinutes": 72,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 55,
+            "passed": false,
+            "errors": 1,
+            "warnings": 2,
+            "codes": {
+              "DAY_OVERLOADED": 2,
+              "TRAVEL_TOO_LONG": 1
+            }
+          },
+          "estimatedSpend": 330,
+          "budget": 3000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 72min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "青岛天主教堂（圣弥厄尔教堂）",
+          "老转村山东菜馆"
+        ],
+        "unknownTravelHops": 4,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 2250,
+          "beforeIssues": 3,
+          "afterIssues": 3,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "km-016",
+      "city": "昆明",
+      "prompt": "两个人昆明两天，预算2000，想看自然风光、逛公园，节奏轻松",
+      "pipeline": {
+        "ms": 4757,
+        "tripId": "ed26c8a4-4362-4ec9-8f99-9979e88033bf",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 8,
+          "factualAccuracy": 1,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 93,
+          "travelAssessed": true,
+          "severeTravel": true,
+          "validation": {
+            "score": 65,
+            "passed": false,
+            "errors": 1,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1,
+              "TRAVEL_TOO_LONG": 1
+            }
+          },
+          "estimatedSpend": 1700,
+          "budget": 2000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 93min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [
+          "相邻地点交通约 93 分钟，超过上限 60 分钟"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 50,
+          "beforeIssues": 2,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      },
+      "baseline": {
+        "ms": 2128,
+        "plan": {
+          "title": "昆明两日轻松自然之旅（2人，预算2000元）",
+          "dayPlans": [
+            {
+              "title": "第一天：滇池湖畔与西山风光",
+              "stops": [
+                {
+                  "name": "海埂公园",
+                  "address": "昆明市西山区滇池路1318号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "滇池海埂大坝",
+                  "address": "昆明市西山区滇池路",
+                  "category": "viewpoint",
+                  "startTime": "10:45",
+                  "durationMinutes": 60,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "桥香园过桥米线（滇池路店）",
+                  "address": "昆明市西山区滇池路",
+                  "category": "food",
+                  "startTime": "12:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 45,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "西山森林公园",
+                  "address": "昆明市西山区西山",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 180,
+                  "estimatedCost": 40,
+                  "meal": null
+                }
+              ]
+            },
+            {
+              "title": "第二天：翠湖公园与云南大学周边漫步",
+              "stops": [
+                {
+                  "name": "翠湖公园",
+                  "address": "昆明市五华区翠湖南路67号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "云南大学",
+                  "address": "昆明市五华区翠湖北路2号",
+                  "category": "attraction",
+                  "startTime": "11:15",
+                  "durationMinutes": 60,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "文林街小吃",
+                  "address": "昆明市五华区文林街",
+                  "category": "food",
+                  "startTime": "12:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 40,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "昆明动物园",
+                  "address": "昆明市五华区青年路92号",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 150,
+                  "estimatedCost": 20,
+                  "meal": null
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 6,
+          "factualAccuracy": 0.75,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 439,
+          "travelAssessed": false,
+          "severeTravel": true,
+          "validation": {
+            "score": 55,
+            "passed": false,
+            "errors": 1,
+            "warnings": 2,
+            "codes": {
+              "DAY_OVERLOADED": 1,
+              "TRAVEL_TOO_LONG": 1,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 145,
+          "budget": 2000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 439min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "桥香园过桥米线（滇池路店）",
+          "文林街小吃"
+        ],
+        "unknownTravelHops": 4,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 2093,
+          "beforeIssues": 3,
+          "afterIssues": 3,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "sy-017",
+      "city": "三亚",
+      "prompt": "情侣三亚三天度假，预算8000，想住得舒服、看海、吃海鲜，不想赶行程",
+      "pipeline": {
+        "ms": 5327,
+        "tripId": "fef5a45e-d747-4a40-88d6-d13ca3b762e5",
+        "revision": 1,
+        "metrics": {
+          "days": 3,
+          "totalStops": 10,
+          "stopsByDay": [
+            3,
+            3,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 3,
+          "mealCoverage": 1,
+          "factualStops": 10,
+          "factualAccuracy": 1,
+          "addressStops": 10,
+          "addressRate": 1,
+          "maxTravelMinutes": 74,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 75,
+            "passed": false,
+            "errors": 1,
+            "warnings": 0,
+            "codes": {
+              "TRAVEL_TOO_LONG": 1
+            }
+          },
+          "estimatedSpend": 6180,
+          "budget": 8000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 74min > 60min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [
+          "Route 凤凰岛桥头公园 → 三亚·中交凤凰岛 uses Haversine estimation",
+          "Route 三亚·中交凤凰岛 → 旺豪超市(胜利购物广场店) uses Haversine estimation",
+          "Route 旺豪超市(胜利购物广场店) → 人人捞火锅(商品街店) uses Haversine estimation",
+          "相邻地点交通约 74 分钟，超过上限 60 分钟"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 34,
+          "beforeIssues": 1,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      },
+      "baseline": {
+        "ms": 3439,
+        "plan": {
+          "title": "三亚三天慢度假：海景酒店、海鲜与沙滩",
+          "dayPlans": [
+            {
+              "title": "抵达与亚龙湾慢时光",
+              "stops": [
+                {
+                  "name": "亚龙湾万豪度假酒店",
+                  "address": "三亚市吉阳区亚龙湾国家旅游度假区",
+                  "category": "hotel",
+                  "startTime": "11:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 900,
+                  "meal": null
+                },
+                {
+                  "name": "亚龙湾海滩",
+                  "address": "三亚市吉阳区亚龙湾国家旅游度假区",
+                  "category": "viewpoint",
+                  "startTime": "14:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "亚龙湾壹号小镇·海鲜广场",
+                  "address": "三亚市吉阳区亚龙湾壹号小镇",
+                  "category": "food",
+                  "startTime": "17:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 200,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "蜈支洲岛与海棠湾夜色",
+              "stops": [
+                {
+                  "name": "蜈支洲岛旅游区",
+                  "address": "三亚市海棠区海棠湾镇蜈支洲岛",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 240,
+                  "estimatedCost": 250,
+                  "meal": null
+                },
+                {
+                  "name": "蜈支洲岛珊瑚酒店餐厅",
+                  "address": "三亚市海棠区蜈支洲岛",
+                  "category": "food",
+                  "startTime": "13:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 120,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "海棠湾免税城",
+                  "address": "三亚市海棠区海棠北路118号",
+                  "category": "shopping",
+                  "startTime": "16:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "海棠湾海鲜大排档",
+                  "address": "三亚市海棠区海棠湾镇",
+                  "category": "food",
+                  "startTime": "19:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 180,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "天涯海角与市区海鲜收尾",
+              "stops": [
+                {
+                  "name": "天涯海角游览区",
+                  "address": "三亚市天涯区天涯镇",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 150,
+                  "estimatedCost": 80,
+                  "meal": null
+                },
+                {
+                  "name": "第一市场海鲜加工街",
+                  "address": "三亚市天涯区新建街第一市场",
+                  "category": "food",
+                  "startTime": "12:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 150,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "三亚湾椰梦长廊",
+                  "address": "三亚市天涯区三亚湾路",
+                  "category": "viewpoint",
+                  "startTime": "15:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "三亚凤凰国际机场",
+                  "address": "三亚市天涯区凤凰路",
+                  "category": "activity",
+                  "startTime": "18:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 0,
+                  "meal": null
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 3,
+          "totalStops": 11,
+          "stopsByDay": [
+            3,
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 3,
+          "mealCoverage": 1,
+          "factualStops": 5,
+          "factualAccuracy": 0.45454545454545453,
+          "addressStops": 11,
+          "addressRate": 1,
+          "maxTravelMinutes": 59,
+          "travelAssessed": false,
+          "severeTravel": false,
+          "validation": {
+            "score": 90,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1
+            }
+          },
+          "estimatedSpend": 1880,
+          "budget": 8000,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "unverifiedNames": [
+          "亚龙湾壹号小镇·海鲜广场",
+          "蜈支洲岛旅游区",
+          "蜈支洲岛珊瑚酒店餐厅",
+          "海棠湾免税城",
+          "海棠湾海鲜大排档",
+          "第一市场海鲜加工街"
+        ],
+        "unknownTravelHops": 6,
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 2150,
+          "beforeIssues": 1,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "gl-018",
+      "city": "桂林",
+      "prompt": "两个人桂林两天，预算2000，想看山水、坐船、吃米粉",
+      "pipeline": {
+        "ms": 4717,
+        "tripId": "43b61003-d784-4df8-9aaf-fa4fb3ea0e18",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 9,
+          "stopsByDay": [
+            5,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 9,
+          "factualAccuracy": 1,
+          "addressStops": 9,
+          "addressRate": 1,
+          "maxTravelMinutes": 40,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 90,
+            "passed": true,
+            "errors": 0,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1
+            }
+          },
+          "estimatedSpend": 1700,
+          "budget": 2000,
+          "budgetWithinCap": true,
+          "constraintFailures": [],
+          "constraintsPassed": true
+        },
+        "warnings": [
+          "Route 桂林新区环城水系景区 → 桂林临桂万达广场 uses Haversine estimation",
+          "Route 桂林临桂万达广场 → 海底捞火锅(桂林临桂万达店) uses Haversine estimation"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": null,
+          "ms": 2,
+          "beforeIssues": 1,
+          "afterIssues": 1,
+          "inventedPlaces": [],
+          "note": "没有可自动修复的问题"
+        }
+      },
+      "baseline": {
+        "ms": 2216,
+        "plan": {
+          "title": "桂林两日山水慢行：漓江竹筏与米粉寻味",
+          "dayPlans": [
+            {
+              "title": "第一天：城徽山水与两江夜色",
+              "stops": [
+                {
+                  "name": "象鼻山景区",
+                  "address": "桂林市象山区滨江路",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 55,
+                  "meal": null
+                },
+                {
+                  "name": "桂林米粉文化中心（信义路店）",
+                  "address": "桂林市秀峰区信义路",
+                  "category": "food",
+                  "startTime": "11:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 25,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "芦笛岩",
+                  "address": "桂林市秀峰区芦笛路1号",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 90,
+                  "meal": null
+                },
+                {
+                  "name": "两江四湖·日月双塔",
+                  "address": "桂林市象山区杉湖北路",
+                  "category": "viewpoint",
+                  "startTime": "17:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 35,
+                  "meal": null
+                }
+              ]
+            },
+            {
+              "title": "第二天：漓江竹筏与阳朔西街",
+              "stops": [
+                {
+                  "name": "杨堤码头（漓江竹筏）",
+                  "address": "桂林市阳朔县杨堤乡",
+                  "category": "activity",
+                  "startTime": "09:00",
+                  "durationMinutes": 150,
+                  "estimatedCost": 220,
+                  "meal": null
+                },
+                {
+                  "name": "兴坪古镇",
+                  "address": "桂林市阳朔县兴坪镇",
+                  "category": "attraction",
+                  "startTime": "12:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "兴坪老地方米粉店",
+                  "address": "桂林市阳朔县兴坪镇老街",
+                  "category": "food",
+                  "startTime": "13:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 20,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "阳朔西街",
+                  "address": "桂林市阳朔县西街",
+                  "category": "shopping",
+                  "startTime": "16:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 60,
+                  "meal": null
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 7,
+          "factualAccuracy": 0.875,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 392,
+          "travelAssessed": false,
+          "severeTravel": true,
+          "validation": {
+            "score": 0,
+            "passed": false,
+            "errors": 4,
+            "warnings": 3,
+            "codes": {
+              "DAY_OVERLOADED": 2,
+              "TRAVEL_TOO_LONG": 4,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 505,
+          "budget": 2000,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 392min > 60min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "兴坪老地方米粉店"
+        ],
+        "unknownTravelHops": 2,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 2040,
+          "beforeIssues": 7,
+          "afterIssues": 7,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "ly-019",
+      "city": "洛阳",
+      "prompt": "两个人洛阳两天，预算1800，想看古迹和博物馆，吃点本地特色",
+      "pipeline": {
+        "ms": 5009,
+        "tripId": "017dcb80-4478-4110-898e-67ad532cc353",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 8,
+          "factualAccuracy": 1,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 73,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 40,
+            "passed": false,
+            "errors": 2,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1,
+              "TRAVEL_TOO_LONG": 2
+            }
+          },
+          "estimatedSpend": 1531,
+          "budget": 1800,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 73min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [
+          "provider 未提供可验证的饮食匹配：素食",
+          "Route 关林景区 → 方中山胡辣汤(洛阳一店) uses Haversine estimation",
+          "Route 方中山胡辣汤(洛阳一店) → 定鼎门南广场 uses Haversine estimation",
+          "相邻地点交通约 73 分钟，超过上限 60 分钟",
+          "相邻地点交通约 73 分钟，超过上限 60 分钟"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": true,
+          "ms": 39,
+          "beforeIssues": 3,
+          "afterIssues": 0,
+          "inventedPlaces": []
+        }
+      },
+      "baseline": {
+        "ms": 3103,
+        "plan": {
+          "title": "洛阳两日古迹与博物馆之旅（素食友好）",
+          "dayPlans": [
+            {
+              "title": "第一天：龙门石窟与洛阳博物馆",
+              "stops": [
+                {
+                  "name": "龙门石窟",
+                  "address": "洛阳市洛龙区龙门中街13号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 180,
+                  "estimatedCost": 90,
+                  "meal": null
+                },
+                {
+                  "name": "龙门石窟景区内素食餐厅",
+                  "address": "龙门石窟景区内",
+                  "category": "food",
+                  "startTime": "12:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 40,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "洛阳博物馆",
+                  "address": "洛阳市洛龙区聂泰路",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 150,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "老城十字街夜市",
+                  "address": "洛阳市老城区中州东路",
+                  "category": "food",
+                  "startTime": "18:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 50,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "第二天：白马寺与隋唐洛阳城遗址",
+              "stops": [
+                {
+                  "name": "白马寺",
+                  "address": "洛阳市洛龙区白马寺镇洛白路6号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 150,
+                  "estimatedCost": 35,
+                  "meal": null
+                },
+                {
+                  "name": "白马寺素斋馆",
+                  "address": "白马寺景区内",
+                  "category": "food",
+                  "startTime": "12:00",
+                  "durationMinutes": 60,
+                  "estimatedCost": 30,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "隋唐洛阳城国家遗址公园（明堂天堂）",
+                  "address": "洛阳市老城区定鼎路与中州路交叉口",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 90,
+                  "meal": null
+                },
+                {
+                  "name": "真不同饭店（老城店）",
+                  "address": "洛阳市老城区中州东路393号",
+                  "category": "food",
+                  "startTime": "18:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 80,
+                  "meal": "dinner"
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 8,
+          "stopsByDay": [
+            4,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 7,
+          "factualAccuracy": 0.875,
+          "addressStops": 8,
+          "addressRate": 1,
+          "maxTravelMinutes": 202,
+          "travelAssessed": false,
+          "severeTravel": true,
+          "validation": {
+            "score": 20,
+            "passed": false,
+            "errors": 2,
+            "warnings": 3,
+            "codes": {
+              "DAY_OVERLOADED": 2,
+              "TRAVEL_TOO_LONG": 2,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 415,
+          "budget": 1800,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 202min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "龙门石窟景区内素食餐厅"
+        ],
+        "unknownTravelHops": 2,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 1998,
+          "beforeIssues": 5,
+          "afterIssues": 5,
+          "inventedPlaces": []
+        }
+      }
+    },
+    {
+      "id": "hrb-020",
+      "city": "哈尔滨",
+      "prompt": "两个人哈尔滨两天，预算2500，想看老建筑、吃俄式西餐和东北菜",
+      "pipeline": {
+        "ms": 7120,
+        "tripId": "ec401746-9ea8-4563-9cc8-c77299bf1c29",
+        "revision": 1,
+        "metrics": {
+          "days": 2,
+          "totalStops": 10,
+          "stopsByDay": [
+            6,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 10,
+          "factualAccuracy": 1,
+          "addressStops": 10,
+          "addressRate": 1,
+          "maxTravelMinutes": 63,
+          "travelAssessed": true,
+          "severeTravel": false,
+          "validation": {
+            "score": 65,
+            "passed": false,
+            "errors": 1,
+            "warnings": 1,
+            "codes": {
+              "DAY_OVERLOADED": 1,
+              "TRAVEL_TOO_LONG": 1
+            }
+          },
+          "estimatedSpend": 2126,
+          "budget": 2500,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 63min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "warnings": [
+          "Route 太阳岛风景区 → 哈尔滨极地公园·极地馆 uses Haversine estimation",
+          "Day 2 移除了重复地点",
+          "Day 2 补入候选正餐地点",
+          "相邻地点交通约 63 分钟，超过上限 60 分钟"
+        ],
+        "repair": {
+          "attempted": true,
+          "success": null,
+          "ms": 4,
+          "beforeIssues": 2,
+          "afterIssues": 2,
+          "inventedPlaces": [],
+          "note": "没有可自动修复的问题"
+        }
+      },
+      "baseline": {
+        "ms": 2704,
+        "plan": {
+          "title": "哈尔滨两日建筑与美食之旅",
+          "dayPlans": [
+            {
+              "title": "第一天：中央大街老建筑与俄式西餐",
+              "stops": [
+                {
+                  "name": "圣索菲亚大教堂",
+                  "address": "哈尔滨市道里区透笼街88号",
+                  "category": "attraction",
+                  "startTime": "09:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 20,
+                  "meal": null
+                },
+                {
+                  "name": "中央大街",
+                  "address": "哈尔滨市道里区中央大街",
+                  "category": "attraction",
+                  "startTime": "11:00",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "华梅西餐厅",
+                  "address": "哈尔滨市道里区中央大街112号",
+                  "category": "food",
+                  "startTime": "13:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 150,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "防洪纪念塔",
+                  "address": "哈尔滨市道里区斯大林街",
+                  "category": "viewpoint",
+                  "startTime": "15:30",
+                  "durationMinutes": 60,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "老昌春饼",
+                  "address": "哈尔滨市道里区中央大街附近",
+                  "category": "food",
+                  "startTime": "17:30",
+                  "durationMinutes": 90,
+                  "estimatedCost": 80,
+                  "meal": "dinner"
+                }
+              ]
+            },
+            {
+              "title": "第二天：老道外中华巴洛克与东北菜",
+              "stops": [
+                {
+                  "name": "中华巴洛克历史文化街区",
+                  "address": "哈尔滨市道外区靖宇街",
+                  "category": "attraction",
+                  "startTime": "09:30",
+                  "durationMinutes": 120,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "老道外张包铺",
+                  "address": "哈尔滨市道外区靖宇街",
+                  "category": "food",
+                  "startTime": "12:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 60,
+                  "meal": "lunch"
+                },
+                {
+                  "name": "果戈里大街",
+                  "address": "哈尔滨市南岗区果戈里大街",
+                  "category": "attraction",
+                  "startTime": "14:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 0,
+                  "meal": null
+                },
+                {
+                  "name": "波特曼西餐厅",
+                  "address": "哈尔滨市南岗区果戈里大街",
+                  "category": "food",
+                  "startTime": "17:00",
+                  "durationMinutes": 90,
+                  "estimatedCost": 150,
+                  "meal": "dinner"
+                }
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "days": 2,
+          "totalStops": 9,
+          "stopsByDay": [
+            5,
+            4
+          ],
+          "duplicateItems": 0,
+          "duplicateRate": 0,
+          "crossDayDuplicateItems": 0,
+          "mealDays": 2,
+          "mealCoverage": 1,
+          "factualStops": 7,
+          "factualAccuracy": 0.7777777777777778,
+          "addressStops": 9,
+          "addressRate": 1,
+          "maxTravelMinutes": 152,
+          "travelAssessed": false,
+          "severeTravel": true,
+          "validation": {
+            "score": 45,
+            "passed": false,
+            "errors": 1,
+            "warnings": 3,
+            "codes": {
+              "DAY_OVERLOADED": 2,
+              "TRAVEL_TOO_LONG": 1,
+              "WALKING_LIMIT": 1
+            }
+          },
+          "estimatedSpend": 460,
+          "budget": 2500,
+          "budgetWithinCap": true,
+          "constraintFailures": [
+            "travel 152min > 45min"
+          ],
+          "constraintsPassed": false
+        },
+        "unverifiedNames": [
+          "圣索菲亚大教堂",
+          "老道外张包铺"
+        ],
+        "unknownTravelHops": 3,
+        "repair": {
+          "attempted": true,
+          "success": false,
+          "ms": 2253,
+          "beforeIssues": 4,
+          "afterIssues": 4,
+          "inventedPlaces": []
+        }
+      }
+    }
+  ],
+  "totalRuntimeMs": 361665
+}

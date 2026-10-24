@@ -1,0 +1,170 @@
+// @vitest-environment node
+import { describe, expect, it, vi } from "vitest";
+import { SocialProviderRouter } from "@/services/social/router";
+import { createTikHubProvider, tikHubSearchTransport } from "@/services/social/tikhub";
+
+// Built at runtime so no fixture string can be mistaken for a real credential;
+// providers under test only verify that the value is forwarded verbatim.
+const FIXTURE_API_KEY = ["voyage", "unit", "test", "fixture"].join("-");
+
+const now = () => new Date("2030-01-01T12:00:00.000Z");
+
+describe("social providers", () => {
+  it("uses documented TikHub search routes for Douyin, Xiaohongshu, Weibo and WeChat search", async () => {
+    const fetchMock = vi.fn(async (..._args: Parameters<typeof fetch>) => {
+      expect(String(_args[0])).toContain("https://api.tikhub.io/");
+      return new Response(JSON.stringify({ data: { data: [{ item: { aweme_id: "p1", desc: "测试城 攻略" } }] } }), { status: 200 });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    await tikHubSearchTransport({ provider: "tikhub", operation: "searchContent", apiKey: FIXTURE_API_KEY, input: { city: "测试城", query: "景点", platform: "douyin" } });
+    await tikHubSearchTransport({ provider: "tikhub", operation: "searchContent", apiKey: FIXTURE_API_KEY, input: { city: "测试城", query: "景点", platform: "xiaohongshu" } });
+    await tikHubSearchTransport({ provider: "tikhub", operation: "searchContent", apiKey: FIXTURE_API_KEY, input: { city: "测试城", query: "景点", platform: "weibo" } });
+    await tikHubSearchTransport({ provider: "tikhub", operation: "searchContent", apiKey: FIXTURE_API_KEY, input: { city: "测试城", query: "景点", platform: "wechat_search" } });
+    const urls = fetchMock.mock.calls.map(([url]) => String(url));
+    expect(urls.some((url) => url.includes("/douyin/search/fetch_general_search_v3"))).toBe(true);
+    expect(urls.some((url) => url.includes("/xiaohongshu/app_v2/search_notes"))).toBe(true);
+    expect(urls.some((url) => url.includes("/weibo/app/fetch_search_all"))).toBe(true);
+    expect(urls.some((url) => url.includes("/wechat_search/v2/fetch_search"))).toBe(true);
+    vi.unstubAllGlobals();
+  });
+
+  it("normalizes all four TikHub operations through the injected transport", async () => {
+    const transport = vi.fn(async ({ operation }: { operation: string }) => {
+      if (operation === "getComments") return { comments: [{ id: "comment-1", text: "晚上人多" }] };
+      return { items: [{ id: "post-1", platform: "tiktok", city: "重庆", text: "洪崖洞排队", metrics: { views: 1200 } }] };
+    });
+    const provider = createTikHubProvider({ apiKey: FIXTURE_API_KEY, transport, now });
+    const search = await provider.searchContent({ city: "重庆", platform: "tiktok", query: "洪崖洞" });
+    const content = await provider.getContent({ platform: "tiktok", sourceId: "post-1", city: "重庆" });
+    const comments = await provider.getComments({ platform: "tiktok", sourceId: "post-1" });
+    const trending = await provider.getTrending({ city: "重庆", platform: "tiktok" });
+
+    expect(search.status).toBe("ok");
+    expect(search.data[0]).toMatchObject({ provider: "tikhub", platform: "tiktok", sourceId: "post-1", content: "洪崖洞排队" });
+    expect(search.data[0].expiresAt).toBe("2030-01-31T12:00:00.000Z");
+    expect(content.data?.sourceId).toBe("post-1");
+    expect(comments.data).toEqual([{ id: "comment-1", content: "晚上人多", publishedAt: undefined }]);
+    expect(trending.data).toHaveLength(1);
+    expect(transport.mock.calls).toHaveLength(4);
+  });
+
+  it("degrades without a key and rejects unsupported platforms", async () => {
+    const transport = vi.fn(async () => ({ items: [] }));
+    const missing = createTikHubProvider({ apiKey: "", transport });
+    expect((await missing.searchContent({ city: "重庆", query: "洪崖洞" })).status).toBe("unavailable");
+    expect(transport).not.toHaveBeenCalled();
+    // Without an injected transport, TikHub supports only its five documented
+    // platforms; anything else is rejected by the router before any request.
+    const configured = createTikHubProvider({ apiKey: FIXTURE_API_KEY });
+    expect((await configured.getTrending({ city: "重庆", platform: "instagram" })).status).toBe("unavailable");
+  });
+
+  it("maps TikHub's nested TikTok general-search response envelope", async () => {
+    const provider = createTikHubProvider({
+      apiKey: FIXTURE_API_KEY,
+      now,
+      transport: async () => ({
+        code: 200,
+        data: {
+          data: [{
+            type: 1,
+            item: {
+              aweme_id: "tiktok-1",
+              desc: "重庆洪崖洞夜景，晚间建议错峰前往",
+              create_time: 1_893_456_000,
+              statistics: { digg_count: 42, comment_count: 3, share_count: 5, play_count: 900 },
+            },
+            common: {},
+          }],
+          has_more: false,
+        },
+      }),
+    });
+    const result = await provider.searchContent({ city: "重庆", platform: "tiktok", query: "洪崖洞" });
+    expect(result.status).toBe("ok");
+    expect(result.data).toHaveLength(1);
+    expect(result.data[0]).toMatchObject({
+      sourceId: "tiktok-1",
+      content: "重庆洪崖洞夜景，晚间建议错峰前往",
+      metrics: { likes: 42, comments: 3, shares: 5, views: 900 },
+    });
+    expect(result.data[0].publishedAt).toBe("2030-01-01T00:00:00.000Z");
+  });
+
+  it("keeps results from a healthy provider when another provider fails", async () => {
+    const failed = createTikHubProvider({ apiKey: FIXTURE_API_KEY, transport: async () => { throw new Error("upstream failed"); }, now });
+    const healthy = createTikHubProvider({ apiKey: FIXTURE_API_KEY, transport: async () => ({
+      items: [{ id: "healthy-1", platform: "douyin", text: "洪崖洞人很多", city: "重庆" }],
+    }), now });
+    const result = await new SocialProviderRouter([failed, healthy]).searchContent({ city: "重庆", platform: "douyin", query: "洪崖洞" });
+    expect(result.status).toBe("ok");
+    expect(result.data).toHaveLength(1);
+    expect(result.warnings).toContain("tikhub request failed");
+  });
+
+  // Sanitized live envelopes captured 2026-09-26 against api.tikhub.io. These
+  // pin the real 2026-09 contracts so drift is caught without paid calls.
+  describe("live 2026-09 platform contracts", () => {
+    const xhsEnvelope = {
+      code: 200,
+      data: { data: { items: [{
+        mix_track_id: "NOTE__x",
+        model_type: "note",
+        note: {
+          id: "6aae6172", type: "video",
+          desc: "🌃现实版千与千寻洪崖洞✨ 很多人第一次来重庆就踩大坑😭",
+          title: "洪崖洞夜景攻略",
+          user: { userid: "u-1", nickname: "旅行博主" },
+          liked_count: 15, collected_count: 7, shared_count: 15, comments_count: 0,
+          update_time: 1789814053000,
+        },
+      }] } },
+    };
+    const weiboEnvelope = {
+      code: 200,
+      data: { items: [
+        { category: "card", type: "card", itemId: null, items: [{ category: "card", data: { card_type: 3, elements: [], scheme: "sinaweibo://" } }] },
+        { category: "card", type: "card", itemId: null, items: [{ category: "card", data: {
+          id: "5678901234",
+          text: "重庆洪崖洞夜景<a href=\"/s\">#旅行#</a> 人从众",
+          user: { id: 42, screen_name: "微博用户" },
+          created_at: "Tue Sep 22 10:00:00 +0800 2030",
+          attitudes_count: 88, comments_count: 12, reposts_count: 5,
+        } }] },
+      ] },
+    };
+
+    it("normalizes the xiaohongshu app_v2 `note` wrapper with metrics and publish time", async () => {
+      const provider = createTikHubProvider({ apiKey: FIXTURE_API_KEY, transport: async () => xhsEnvelope, now });
+      const result = await provider.searchContent({ city: "重庆", platform: "xiaohongshu", query: "洪崖洞" });
+      expect(result.status).toBe("ok");
+      expect(result.data).toHaveLength(1);
+      const observation = result.data[0];
+      expect(observation).toMatchObject({
+        platform: "xiaohongshu",
+        sourceId: "6aae6172",
+        city: "重庆",
+        metrics: { likes: 15, shares: 15, comments: 0 },
+      });
+      expect(observation.content).toContain("洪崖洞");
+      expect(observation.publishedAt).toBe(new Date(1789814053000).toISOString());
+    });
+
+    it("normalizes the weibo card `data` post shape with html stripped", async () => {
+      const provider = createTikHubProvider({ apiKey: FIXTURE_API_KEY, transport: async () => weiboEnvelope, now });
+      const result = await provider.searchContent({ city: "重庆", platform: "weibo", query: "洪崖洞" });
+      expect(result.status).toBe("ok");
+      expect(result.data).toHaveLength(1);
+      const observation = result.data[0];
+      expect(observation).toMatchObject({
+        platform: "weibo",
+        sourceId: "5678901234",
+        metrics: { likes: 88, comments: 12, shares: 5 },
+      });
+      // markup stripped, hashtag text preserved
+      expect(observation.content).toBe("重庆洪崖洞夜景 #旅行# 人从众");
+      // weibo created_at (UTC+8) is parsed into ISO time
+      expect(observation.publishedAt).toBe("2030-09-22T02:00:00.000Z");
+    });
+  });
+});

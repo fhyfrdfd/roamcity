@@ -1,0 +1,78 @@
+import type { SupabaseClient, User, Session } from "@supabase/supabase-js";
+import { isSupabaseEnvConfigured } from "@/lib/supabase-config";
+
+export const isSupabaseConfigured = isSupabaseEnvConfigured;
+
+let supabaseClient: SupabaseClient | null = null;
+
+/**
+ * The supabase-js bundle loads on first auth call, not at import time — guest
+ * mode (the default) never pays for it in the initial client bundle.
+ */
+async function loadSupabaseClient(): Promise<SupabaseClient | null> {
+  if (!isSupabaseConfigured()) return null;
+  if (!supabaseClient) {
+    const { createClient } = await import("@supabase/supabase-js");
+    supabaseClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+        },
+      },
+    );
+  }
+  return supabaseClient;
+}
+
+export interface AuthState {
+  user: User | null;
+  session: Session | null;
+  isGuest: boolean;
+  isConfigured: boolean;
+}
+
+const MOCK_GUEST_USER: User = {
+  id: "guest-traveler-demo",
+  app_metadata: {},
+  user_metadata: { name: "Guest Traveler (Demo)" },
+  aud: "authenticated",
+  created_at: "",
+};
+
+export async function getCurrentUser(): Promise<User | null> {
+  const client = await loadSupabaseClient();
+  if (!client) return MOCK_GUEST_USER;
+  const { data } = await client.auth.getUser();
+  return data.user ?? MOCK_GUEST_USER;
+}
+
+export async function signInWithMagicLink(email: string): Promise<{ error?: string }> {
+  const client = await loadSupabaseClient();
+  if (!client) {
+    return { error: "Supabase not configured. Running in Demo Mode." };
+  }
+  const { error } = await client.auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: typeof window !== "undefined" ? `${window.location.origin}/trips` : undefined,
+    },
+  });
+  return { error: error?.message };
+}
+
+export async function signInAnonymously(): Promise<{ error?: string }> {
+  const client = await loadSupabaseClient();
+  if (!client) return {};
+  const { error } = await client.auth.signInAnonymously();
+  return { error: error?.message };
+}
+
+export async function signOutUser(): Promise<{ error?: string }> {
+  const client = await loadSupabaseClient();
+  if (!client) return {};
+  const { error } = await client.auth.signOut();
+  return { error: error?.message };
+}

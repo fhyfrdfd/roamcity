@@ -1,0 +1,11 @@
+{
+  "id": "knock-community-hall",
+  "title": "Knock Community Hall · 3DGS 示例",
+  "city": "Knock",
+  "placeNames": [],
+  "model": "/3d/splats/knock-community-hall.sog",
+  "cover": "/3d/scenes/knock-community-hall/cover.webp",
+  "license": "CC-BY-4.0",
+  "source": "Knock Community Hall by scbenoit (SuperSplat scene 0ff2e6dc; mirrored in PlayCanvas engine examples)",
+  "format": "splat"
+}

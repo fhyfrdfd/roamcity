@@ -1,0 +1,125 @@
+import { NextResponse } from "next/server";
+import {
+  isAmapConfigured,
+  amapWalkingRoute,
+  amapDrivingRoute,
+  amapTransitRoute,
+} from "@/services/map/amap-rest";
+import { haversineMeters, estimateTransit } from "@/lib/utils";
+import { enforceRateLimit } from "@/lib/api-guards";
+import { logger } from "@/lib/logger";
+import { BoundedTtlCache } from "@/lib/lru-cache";
+
+interface RouteQuery {
+  origin: { lng: number; lat: number };
+  destination: { lng: number; lat: number };
+  mode?: "walk" | "metro" | "bus" | "taxi" | "drive";
+  city?: string;
+}
+
+// Quota-protection cache for REAL AMap geometry only. Bounded because the key
+// space comes from request input (an unbounded Map here was a memory leak).
+// Estimated Haversine fallbacks are never cached: they are pure math to
+// recompute, and caching one would keep serving an estimate for TTL minutes
+// after AMap recovers from a transient failure.
+const CACHE_TTL_MS = 1000 * 60 * 30; // 30 minutes
+const routeCache = new BoundedTtlCache<unknown>({ maxSize: 2_000, ttlMs: CACHE_TTL_MS });
+
+function getCacheKey(q: RouteQuery): string {
+  const o = `${q.origin.lng.toFixed(5)},${q.origin.lat.toFixed(5)}`;
+  const d = `${q.destination.lng.toFixed(5)},${q.destination.lat.toFixed(5)}`;
+  return `${q.mode ?? "auto"}:${o}->${d}:${q.city ?? ""}`;
+}
+
+export async function POST(request: Request) {
+  // Paid providers behind this route share one budget per caller.
+  const limited = enforceRateLimit(request, "amap");
+  if (limited) return limited;
+  try {
+    const body = (await request.json()) as Partial<RouteQuery>;
+    const { origin, destination, mode = "walk", city = "重庆" } = body;
+
+    if (
+      !origin ||
+      !destination ||
+      typeof origin.lng !== "number" ||
+      typeof origin.lat !== "number" ||
+      typeof destination.lng !== "number" ||
+      typeof destination.lat !== "number"
+    ) {
+      return NextResponse.json({ error: "Invalid coordinates" }, { status: 400 });
+    }
+
+    const cacheKey = getCacheKey({ origin, destination, mode, city });
+    const cached = routeCache.get(cacheKey);
+    if (cached !== undefined) {
+      return NextResponse.json(cached);
+    }
+
+    if (isAmapConfigured()) {
+      try {
+        let result;
+        if (mode === "walk") {
+          result = await amapWalkingRoute(origin, destination);
+        } else if (mode === "taxi" || mode === "drive") {
+          result = await amapDrivingRoute(origin, destination);
+        } else if (mode === "metro" || mode === "bus") {
+          // Do not relabel a driving/walking fallback as an authoritative transit route.
+          result = await amapTransitRoute(origin, destination, city, mode === "bus" ? "5" : "0");
+        } else {
+          result = await amapWalkingRoute(origin, destination);
+        }
+
+        const payload = {
+          source: "amap",
+          estimated: false,
+          mode,
+          distanceMeters: result.distanceMeters,
+          durationMinutes: result.durationMinutes,
+          polyline: result.polyline,
+          steps: result.steps,
+          walkingDistanceMeters: result.walkingDistanceMeters,
+          transferCount: result.transferCount,
+          publicTransitCostYuan: result.publicTransitCostYuan,
+          taxiCostYuan: result.taxiCostYuan,
+          trafficLevel: result.trafficLevel,
+        };
+        routeCache.set(cacheKey, payload);
+        return NextResponse.json(payload);
+      } catch (err) {
+        logger.warn("amap-route.fallback_haversine", { error: err });
+      }
+    }
+
+    // Fallback: Haversine estimation — deliberately NOT cached (see routeCache note).
+    const meters = haversineMeters(origin, destination);
+    const transit = estimateTransit(meters);
+    const fallbackPayload = {
+      source: "haversine",
+      estimated: true,
+      mode: mode === "drive" ? "taxi" : mode,
+      distanceMeters: meters,
+      durationMinutes: transit.minutes,
+      polyline: [
+        [origin.lng, origin.lat],
+        [destination.lng, destination.lat],
+      ],
+      steps: [
+        {
+          instruction: `沿途从起点前往终点（${transit.label}，直线预估距离）`,
+          distanceMeters: meters,
+          durationMinutes: transit.minutes,
+          polyline: [
+            [origin.lng, origin.lat],
+            [destination.lng, destination.lat],
+          ],
+        },
+      ],
+    };
+
+    return NextResponse.json(fallbackPayload);
+  } catch (error) {
+    logger.error("amap-route.failed", { error });
+    return NextResponse.json({ error: "Failed to calculate route" }, { status: 500 });
+  }
+}

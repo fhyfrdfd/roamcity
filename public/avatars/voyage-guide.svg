@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="旅行讲解员小漫">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#fca5a5"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="64" fill="url(#bg)"/>
+  <path d="M24 128c0-22 18-38 40-38s40 16 40 38z" fill="#0f766e"/>
+  <path d="M52 96h24l-4 20H56z" fill="#f8fafc"/>
+  <circle cx="64" cy="58" r="28" fill="#fcd9b8"/>
+  <path d="M34 56c0-20 13-32 30-32s30 12 30 32c-8-8-18-12-30-12S42 48 34 56z" fill="#3f3f46"/>
+  <path d="M34 56c2 8 6 12 12 14-2-10-1-18 2-24-6 2-11 5-14 10z" fill="#3f3f46"/>
+  <path d="M94 56c-2 8-6 12-12 14 2-10 1-18-2-24 6 2 11 5 14 10z" fill="#3f3f46"/>
+  <circle cx="54" cy="60" r="3" fill="#27272a"/>
+  <circle cx="74" cy="60" r="3" fill="#27272a"/>
+  <path d="M58 72c3 3 9 3 12 0" fill="none" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="44" cy="68" r="4" fill="#f9a8a8" opacity="0.7"/>
+  <circle cx="84" cy="68" r="4" fill="#f9a8a8" opacity="0.7"/>
+  <path d="M104 30l4 8 8 4-8 4-4 8-4-8-8-4 8-4z" fill="#fff7ed"/>
+</svg>

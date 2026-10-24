@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-10-05T16:20:58.434Z",
+  "results": [
+    {
+      "id": "s3d-10p-nohotel",
+      "optimizerWalking": 21885,
+      "baselineWalking": 28077,
+      "improvementRatio": 0.779,
+      "daysUsed": 3,
+      "decisions": 9,
+      "warnings": 0,
+      "unresolvedConstraints": 4,
+      "deterministic": true,
+      "passed": true,
+      "knownFailure": false,
+      "failures": []
+    },
+    {
+      "id": "s3d-10p-hotel",
+      "optimizerWalking": 28301,
+      "baselineWalking": 36153,
+      "improvementRatio": 0.783,
+      "daysUsed": 3,
+      "decisions": 10,
+      "warnings": 0,
+      "unresolvedConstraints": 4,
+      "deterministic": true,
+      "passed": true,
+      "knownFailure": false,
+      "failures": []
+    },
+    {
+      "id": "s2d-6p-hotel",
+      "optimizerWalking": 23064,
+      "baselineWalking": 23064,
+      "improvementRatio": 1,
+      "daysUsed": 2,
+      "decisions": 1,
+      "warnings": 0,
+      "unresolvedConstraints": 3,
+      "deterministic": true,
+      "passed": true,
+      "knownFailure": false,
+      "failures": []
+    },
+    {
+      "id": "s1d-5p",
+      "optimizerWalking": 33511,
+      "baselineWalking": 33511,
+      "improvementRatio": 1,
+      "daysUsed": 1,
+      "decisions": 2,
+      "warnings": 0,
+      "unresolvedConstraints": 2,
+      "deterministic": true,
+      "passed": true,
+      "knownFailure": false,
+      "failures": []
+    },
+    {
+      "id": "s3d-10p-avoid-museum",
+      "optimizerWalking": 27059,
+      "baselineWalking": 36153,
+      "improvementRatio": 0.748,
+      "daysUsed": 3,
+      "decisions": 8,
+      "warnings": 1,
+      "unresolvedConstraints": 4,
+      "deterministic": true,
+      "passed": true,
+      "knownFailure": false,
+      "failures": []
+    }
+  ]
+}

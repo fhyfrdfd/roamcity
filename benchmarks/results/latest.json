@@ -1,0 +1,146 @@
+{
+  "generatedAt": "2026-10-05T16:21:25.999Z",
+  "cases": [
+    {
+      "id": "adversarial-apply-without-confirmation",
+      "category": "adversarial",
+      "ok": true,
+      "deterministic": true,
+      "digest": "9fdca2fb",
+      "ms": 22,
+      "failures": []
+    },
+    {
+      "id": "adversarial-replay-consumed-token",
+      "category": "adversarial",
+      "ok": true,
+      "deterministic": true,
+      "digest": "2dbe7c83",
+      "ms": 9,
+      "failures": []
+    },
+    {
+      "id": "adversarial-stale-revision",
+      "category": "adversarial",
+      "ok": true,
+      "deterministic": true,
+      "digest": "9fdca2fb",
+      "ms": 6,
+      "failures": []
+    },
+    {
+      "id": "adversarial-forged-token",
+      "category": "adversarial",
+      "ok": true,
+      "deterministic": true,
+      "digest": "9fdca2fb",
+      "ms": 5,
+      "failures": []
+    },
+    {
+      "id": "edge-empty-trip-id",
+      "category": "edge",
+      "ok": true,
+      "deterministic": true,
+      "digest": "e42cff78",
+      "ms": 0,
+      "failures": []
+    },
+    {
+      "id": "edge-missing-trip",
+      "category": "edge",
+      "ok": true,
+      "deterministic": true,
+      "digest": "e42cff78",
+      "ms": 0,
+      "failures": []
+    },
+    {
+      "id": "edge-max-scale-input",
+      "category": "edge",
+      "ok": true,
+      "deterministic": true,
+      "digest": "18ebf0e2",
+      "ms": 2,
+      "failures": []
+    },
+    {
+      "id": "edge-day-count-overflow",
+      "category": "edge",
+      "ok": true,
+      "deterministic": true,
+      "digest": "e42cff78",
+      "ms": 0,
+      "failures": []
+    },
+    {
+      "id": "golden-create-guilin-chongqing",
+      "category": "golden",
+      "ok": true,
+      "deterministic": true,
+      "digest": "a99c9c2e",
+      "ms": 1,
+      "failures": []
+    },
+    {
+      "id": "golden-get-trip-roundtrip",
+      "category": "golden",
+      "ok": true,
+      "deterministic": true,
+      "digest": "4e2db5fd",
+      "ms": 2,
+      "failures": []
+    },
+    {
+      "id": "golden-propose-walk-reduction",
+      "category": "golden",
+      "ok": true,
+      "deterministic": true,
+      "digest": "d3ea5bd4",
+      "ms": 3,
+      "failures": []
+    },
+    {
+      "id": "golden-propose-apply-token-chain",
+      "category": "golden",
+      "ok": true,
+      "deterministic": true,
+      "digest": "17d4205c",
+      "ms": 3,
+      "failures": []
+    },
+    {
+      "id": "golden-optimize-itinerary",
+      "category": "golden",
+      "ok": true,
+      "deterministic": true,
+      "digest": "3192a15e",
+      "ms": 2,
+      "failures": []
+    },
+    {
+      "id": "golden-trip-state-and-constraints",
+      "category": "golden",
+      "ok": true,
+      "deterministic": true,
+      "digest": "38c32dff",
+      "ms": 1,
+      "failures": []
+    },
+    {
+      "id": "golden-search-places-fixture",
+      "category": "golden",
+      "ok": true,
+      "deterministic": true,
+      "digest": "eb9b87a2",
+      "ms": 0,
+      "failures": []
+    }
+  ],
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "nondeterministic": 0
+  }
+}

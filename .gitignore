@@ -1,0 +1,27 @@
+node_modules
+.next
+out
+.turbo
+*.tsbuildinfo
+next-env.d.ts
+.env*
+!.env.example
+.DS_Store
+.mimosa
+test-results/
+playwright-report/
+.voyage/
+ui-audit/
+
+# vitest coverage
+coverage/
+
+# IDE
+.idea/
+
+# build artifacts
+*.log
+
+# generated deliverables (kept out of git)
+deck/
+shots/

@@ -1,0 +1,125 @@
+{
+  "name": "voyage-deck-anthropic-editorial",
+  "version": "2.4",
+  "updated": "2026-10-23",
+  "source": {
+    "reference_set": "shots/微信图片_20261023162313_322_2.jpg … _333_2.jpg（12 张）",
+    "identified_as": "Anthropic Research Overview deck（英文，12 页，竖版约 5:7）",
+    "canvas_note": "截图 1440×3120，含上下各 23%、左右各 8% 的查看器黑边；真实页面区约 1210×1685，竖版。16:9 演示稿只借用色彩、字体与元素语言，版式需重排。",
+    "method": "浏览器 canvas 抽样（y 25%–70%，排除黑边与状态栏）+ 子代理逐页读图核对",
+    "cross_check": "程序取色 #D97758 与读图判断 #D97757 一致"
+  },
+  "colors": {
+    "canvas": "#FAF9F5",
+    "surface": "#FFFFFF",
+    "ink": "#0F0E0E",
+    "ink_text": "#1F1F1F",
+    "ink_soft": "#4A4540",
+    "text_secondary": "#6B6660",
+    "ink_muted": "#8A837B",
+    "coral": "#D97757",
+    "coral_deep": "#B85C3F",
+    "mist_blue": "#6699CC",
+    "mint": "#BBDDCC",
+    "lavender": "#CCCCDD",
+    "beige": "#EEDDCC",
+    "deep_red": "#990022",
+    "neutral_gray": "#C9C6BF",
+    "ivory": "#F5F1E8",
+    "theater_bg": "#141413",
+    "blueprint_bg": "#F7F7F5",
+    "product_teal": "#0F766E",
+    "line": "#E4DDD2",
+    "night": "#0F0E0E",
+    "night_surface": "#1B1917"
+  },
+  "coral_ramp": {
+    "50": "#FBF0EA",
+    "100": "#F3D9CD",
+    "200": "#E8B29D",
+    "500": "#D97757",
+    "600": "#B85C3E",
+    "800": "#8F3F26"
+  },
+  "target_ratio": {
+    "canvas": 0.75,
+    "ink": 0.15,
+    "coral": 0.08,
+    "deep_red": 0.02
+  },
+  "measured_share": {
+    "canvas": 0.495,
+    "coral": 0.144,
+    "ink": 0.106,
+    "mist_blue": 0.085,
+    "mint": 0.065,
+    "lavender": 0.058,
+    "beige": 0.047
+  },
+  "rules": {
+    "accent_per_slide": 1,
+    "max_colors_per_slide": 3,
+    "tint_blocks": ["mint", "lavender", "beige", "mist_blue"],
+    "full_bleed_pages": ["coral", "night"],
+    "text_on_coral": "canvas",
+    "text_on_night": "canvas",
+    "deep_red_usage": "仅图标/角标点缀，面积 <3%",
+    "screenshot_page_bg": "#FFFFFF",
+    "divider": "1px #E5E2DC"
+  },
+  "typography": {
+    "headline": {
+      "family": "Source Serif 4",
+      "weight": "Semibold",
+      "cjk": "Noto Serif SC Bold / 思源宋体",
+      "fallback": ["Georgia", "宋体 Bold"]
+    },
+    "body": {
+      "family": "Inter",
+      "weight": "Regular / Medium",
+      "cjk": "Noto Sans SC / 思源黑体",
+      "fallback": ["Segoe UI", "Microsoft YaHei"]
+    },
+    "mono": {
+      "family": "JetBrains Mono",
+      "fallback": ["Consolas"]
+    },
+    "scale_pt": {
+      "cover_title": 88,
+      "section_title": 64,
+      "page_title": 40,
+      "lead": 24,
+      "body": 20,
+      "caption": 13,
+      "eyebrow": 12
+    },
+    "line_height": {
+      "title": 1.15,
+      "body": 1.6
+    },
+    "tracking": {
+      "title": "-1%",
+      "eyebrow": "+8%"
+    },
+    "title_body_ratio_min": 2.2,
+    "alignment": "中文标题一律左对齐；封面与满版页居中"
+  },
+  "grid": {
+    "canvas_px": [1920, 1080],
+    "margin_px": 80,
+    "columns": 12,
+    "gutter_px": 24,
+    "baseline_px": 8,
+    "title_block_px": 160
+  },
+  "shape": {
+    "radius_px": 12,
+    "block_radius_px": 0,
+    "content_block_radius_px": 12,
+    "card_radius_px": 12,
+    "border_px": 1,
+    "shadow": "0 8px 24px rgba(15,14,14,0.06)",
+    "shadow_scope": "仅截图，色块与卡片禁用阴影",
+    "note": "满版色块直角；内容浅色块与卡片 12px 圆角；两者不混用"
+  }
+}

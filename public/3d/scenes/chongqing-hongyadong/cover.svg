@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="0.55" stop-color="#134e4a"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+  <linearGradient id="building" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#7c2d12"/></linearGradient>
+</defs>
+<rect width="1200" height="675" fill="url(#sky)"/>
+<circle cx="980" cy="140" r="54" fill="#fde68a" opacity="0.9"/>
+<g opacity="0.95">
+  <rect x="300" y="420" width="600" height="140" fill="url(#building)"/>
+  <rect x="350" y="330" width="500" height="110" fill="#b45309"/>
+  <rect x="400" y="250" width="400" height="100" fill="url(#building)"/>
+  <rect x="450" y="185" width="300" height="85" fill="#92400e"/>
+</g>
+<g fill="#fef3c7" opacity="0.85">
+  <rect x="330" y="445" width="28" height="36"/><rect x="390" y="445" width="28" height="36"/><rect x="450" y="445" width="28" height="36"/><rect x="510" y="445" width="28" height="36"/><rect x="570" y="445" width="28" height="36"/><rect x="630" y="445" width="28" height="36"/><rect x="690" y="445" width="28" height="36"/><rect x="750" y="445" width="28" height="36"/><rect x="810" y="445" width="28" height="36"/>
+  <rect x="380" y="355" width="24" height="30"/><rect x="440" y="355" width="24" height="30"/><rect x="500" y="355" width="24" height="30"/><rect x="560" y="355" width="24" height="30"/><rect x="620" y="355" width="24" height="30"/><rect x="680" y="355" width="24" height="30"/><rect x="740" y="355" width="24" height="30"/><rect x="800" y="355" width="24" height="30"/>
+</g>
+<text x="70" y="120" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="54" font-weight="700">洪崖洞 · 3D 预览</text>
+<text x="72" y="172" fill="#99f6e4" font-family="system-ui, sans-serif" font-size="26">重庆 · 立体山城 / 占位场景</text>
+<text x="72" y="620" fill="#e7e5e4" font-family="system-ui, sans-serif" font-size="20">Voyage · 预置场景演示（模型待替换）</text>
+</svg>

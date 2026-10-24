@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  // Progressive adoption: production src is checked strictly via tsconfig.json.
+  // Test fixtures and benchmarks index literals they just constructed, so the
+  // extra undefined guards would be noise there. Flip this once tests catch up.
+  "compilerOptions": { "noUncheckedIndexedAccess": false },
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx", "benchmarks/**/*.ts", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

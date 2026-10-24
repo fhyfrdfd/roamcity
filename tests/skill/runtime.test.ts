@@ -1,0 +1,394 @@
+// @vitest-environment node
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { validateTrip } from "@/schemas/trip";
+import type { Place, Trip } from "@/types/travel";
+import type { ProviderForecast, ProviderRoute, TravelDataProvider } from "@/skill/providers";
+import { JsonSkillRepository } from "@/skill/repository";
+import { VoyageSkillRuntime } from "@/skill/runtime";
+
+vi.setConfig({ testTimeout: 30_000 });
+
+interface Fixture {
+  places: Place[];
+  weather: ProviderForecast[];
+  route: Omit<ProviderRoute, "source">;
+}
+
+class RealFixtureProvider implements TravelDataProvider {
+  readonly kind = "amap" as const;
+  failRoutes = false;
+  constructor(private readonly fixture: Fixture) {}
+
+  async searchPlaces(input: { query: string; category?: Place["category"]; limit: number }) {
+    return this.fixture.places
+      .filter((place) => !input.category || place.category === input.category)
+      .slice(0, input.limit)
+      .map((place) => ({ ...place, source: "amap" as const, provenance: { source: "amap" as const, estimated: false as const } }));
+  }
+
+  async getWeather() {
+    return this.fixture.weather.map((forecast) => ({ ...forecast, source: "amap" as const }));
+  }
+
+  async planRoute(input: Parameters<TravelDataProvider["planRoute"]>[0]) {
+    if (this.failRoutes) throw new Error("fixture route failure");
+    return { ...this.fixture.route, mode: input.mode, source: "amap" as const };
+  }
+}
+
+describe("Voyage Skill runtime", () => {
+  let dataDir: string;
+  let fixture: Fixture;
+  let provider: RealFixtureProvider;
+  let repository: JsonSkillRepository;
+  let runtime: VoyageSkillRuntime;
+
+  beforeEach(async () => {
+    dataDir = await mkdtemp(path.join(os.tmpdir(), "voyage-skill-"));
+    fixture = JSON.parse(await readFile(path.resolve("tests/fixtures/voyage-provider.json"), "utf8")) as Fixture;
+    provider = new RealFixtureProvider(fixture);
+    repository = new JsonSkillRepository(dataDir);
+    runtime = new VoyageSkillRuntime(repository, async () => provider);
+  });
+
+  afterEach(async () => {
+    await rm(dataDir, { recursive: true, force: true });
+  });
+
+  async function create() {
+    return runtime.createTrip({
+      origin: "桂林", destination: "重庆", startDate: "2030-05-01", days: 3, people: 2, budget: 2500,
+      preferences: ["美食", "夜景", "少走路"], walkingTolerance: "low", fallbackPolicy: "deny",
+    }) as Promise<any>;
+  }
+
+  it("creates the Guilin to Chongqing golden trip from provider facts", async () => {
+    const response = await create();
+    const trip = response.data.trip as Trip;
+    expect(validateTrip(trip).success).toBe(true);
+    expect(trip.days).toHaveLength(3);
+    expect(trip.travelers).toBe(2);
+    expect(trip.budget).toBe(2500);
+    expect(trip.places.length).toBeGreaterThan(4);
+    expect(trip.places.every((place) => place.source === "amap" && Number.isFinite(place.lat) && Number.isFinite(place.lng))).toBe(true);
+    expect(trip.segments.length).toBeGreaterThan(0);
+    expect(trip.segments.every((segment) => segment.provider === "amap" && !segment.estimated)).toBe(true);
+    expect(trip.days.map((day) => day.weather.condition)).toEqual(["多云", "中雨", "晴"]);
+    expect(response.providerStatus.overall).toBe("REAL");
+  });
+
+  it("uses explicit estimated route fallback and preserves provenance", async () => {
+    provider.failRoutes = true;
+    const response = await runtime.createTrip({
+      origin: "桂林", destination: "重庆", startDate: "2030-05-01", days: 3, people: 2, budget: 2500,
+      preferences: [], fallbackPolicy: "estimated",
+    }) as any;
+    expect(response.providerStatus.routes).toBe("ESTIMATED");
+    expect(response.data.trip.segments.every((segment: any) => segment.provider === "haversine" && segment.estimated)).toBe(true);
+    expect(response.warnings.length).toBeGreaterThan(0);
+  });
+
+  it("targets Day 2 and does not mutate Day 1 before apply", async () => {
+    const created = await create();
+    const trip = created.data.trip as Trip;
+    const before = structuredClone(trip);
+    const proposal = await runtime.proposeChange({ tripId: trip.id, instruction: "第二天太累了，少走一点。", fallbackPolicy: "estimated" }) as any;
+    const changes = proposal.data.changes;
+    const day1 = trip.days[0].id;
+    expect(changes.actions.every((action: any) => action.payload.dayId === trip.days[1].id)).toBe(true);
+    expect(changes.proposedTrip.items.filter((item: any) => item.dayId === day1)).toEqual(before.items.filter((item) => item.dayId === day1));
+    expect(changes.metrics).toHaveProperty("walkDistanceBeforeMeters");
+    expect((await repository.getTrip(trip.id))?.trip).toEqual(before);
+  });
+
+  it("preserves completed/current items during rain adaptation", async () => {
+    const created = await create();
+    const trip = structuredClone(created.data.trip) as Trip;
+    const day2 = trip.days[1];
+    const dayItems = trip.items.filter((item) => item.dayId === day2.id).sort((a, b) => a.order - b.order);
+    dayItems[0].status = "done";
+    dayItems[1].status = "current";
+    dayItems[2].placeId = "p-ciqikou";
+    const isolatedDir = await mkdtemp(path.join(os.tmpdir(), "voyage-rain-"));
+    try {
+      const isolatedRepo = new JsonSkillRepository(isolatedDir);
+      await isolatedRepo.createTrip(trip);
+      const isolatedRuntime = new VoyageSkillRuntime(isolatedRepo, async () => provider);
+      const proposal = await isolatedRuntime.proposeChange({
+        tripId: trip.id,
+        instruction: "今天下午下雨了，把后面的露天行程换成室内。",
+        asOf: "2030-05-02T05:00:00.000Z",
+        fallbackPolicy: "estimated",
+      }) as any;
+      const proposed = proposal.data.changes.proposedTrip as Trip;
+      expect(proposed.items.find((item) => item.id === dayItems[0].id)).toEqual(dayItems[0]);
+      expect(proposed.items.find((item) => item.id === dayItems[1].id)).toEqual(dayItems[1]);
+      const changed = proposed.items.find((item) => item.id === dayItems[2].id)!;
+      expect(changed.placeId).not.toBe(dayItems[2].placeId);
+      expect(proposed.places.find((place) => place.id === changed.placeId)?.tags).toContain("室内");
+      expect(proposal.data.changes.itemChanges.some((change: any) => change.type === "replaced")).toBe(true);
+    } finally {
+      await rm(isolatedDir, { recursive: true, force: true });
+    }
+  });
+
+  it("requires confirmation, applies once, and rejects stale proposals", async () => {
+    const created = await create();
+    const tripId = created.data.tripId as string;
+    const first = await runtime.proposeChange({ tripId, instruction: "第二天少走一点", fallbackPolicy: "estimated" }) as any;
+    const second = await runtime.proposeChange({ tripId, instruction: "第二天省100元", fallbackPolicy: "estimated" }) as any;
+    await expect(runtime.applyChange({ tripId, proposalId: first.data.proposalId, expectedTripRevision: 1, confirmed: false })).rejects.toMatchObject({ code: "CONFIRMATION_REQUIRED" });
+    const applied = await runtime.applyChange({ tripId, proposalId: first.data.proposalId, expectedTripRevision: 1, confirmed: true, proposalToken: first.data.proposalToken }) as any;
+    expect(applied.data.revision).toBe(2);
+    // Applying deletes the proposal record (it embeds a whole proposed trip),
+    // so a replay fails closed on the missing record rather than on a
+    // consumed flag — both refuse the second apply.
+    await expect(runtime.applyChange({ tripId, proposalId: first.data.proposalId, expectedTripRevision: 1, confirmed: true, proposalToken: first.data.proposalToken })).rejects.toMatchObject({ code: "PROPOSAL_NOT_FOUND" });
+    await expect(runtime.applyChange({ tripId, proposalId: second.data.proposalId, expectedTripRevision: 1, confirmed: true, proposalToken: second.data.proposalToken })).rejects.toMatchObject({ code: "PROPOSAL_STALE" });
+  });
+
+  it("fails real mode explicitly when no AMap key exists", async () => {
+    const previous = process.env.AMAP_SERVER_KEY;
+    delete process.env.AMAP_SERVER_KEY;
+    process.env.VOYAGE_SKIP_LOCAL_CREDENTIALS = "1";
+    try {
+      const noProvider = new VoyageSkillRuntime(new JsonSkillRepository(dataDir));
+      await expect(noProvider.searchPlaces({ destination: "重庆", query: "景点" })).rejects.toMatchObject({ code: "NO_PROVIDER_CONFIGURED" });
+    } finally {
+      delete process.env.VOYAGE_SKIP_LOCAL_CREDENTIALS;
+      if (previous) process.env.AMAP_SERVER_KEY = previous;
+    }
+  });
+
+  it("normalizes provider authentication failures", async () => {
+    const rejected = new VoyageSkillRuntime(repository, async () => ({
+      kind: "amap" as const,
+      searchPlaces: async () => { throw new Error("AMap search failed: INVALID_USER_KEY"); },
+      getWeather: () => provider.getWeather(),
+      planRoute: (input: Parameters<TravelDataProvider["planRoute"]>[0]) => provider.planRoute(input),
+    }));
+    await expect(rejected.searchPlaces({ destination: "重庆", query: "景点" })).rejects.toMatchObject({ code: "PROVIDER_AUTH_FAILED" });
+  });
+
+  it("keeps the AMap trip usable when Meituan is not configured", async () => {
+    const previous = process.env.MEITUAN_HT_TOKEN;
+    delete process.env.MEITUAN_HT_TOKEN;
+    process.env.VOYAGE_SKIP_LOCAL_CREDENTIALS = "1";
+    try {
+      const response = await runtime.createTrip({
+        origin: "桂林", destination: "重庆", startDate: "2030-05-01", days: 3, people: 2, budget: 2500,
+        preferences: ["美食"], fallbackPolicy: "deny", includeExternalOffers: true,
+      }) as any;
+      expect(response.ok).toBe(true);
+      expect(response.providerStatus.travelOffers).toBe("UNAVAILABLE");
+      expect(response.data.trip.offers).toEqual([]);
+      expect(response.data.trip.places.every((place: Place) => place.source === "amap")).toBe(true);
+    } finally {
+      delete process.env.VOYAGE_SKIP_LOCAL_CREDENTIALS;
+      if (previous !== undefined) process.env.MEITUAN_HT_TOKEN = previous;
+    }
+  });
+
+  it("emits one JSON envelope from the cross-platform CLI", async () => {
+    const inputFile = path.join(dataDir, "input.json");
+    await writeFile(inputFile, JSON.stringify({ destination: "重庆", query: "景点", limit: 3 }), "utf8");
+    const result = spawnSync(process.execPath, ["skills/voyage/scripts/voyage.mjs", "search-places", "--input", inputFile], {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env: { ...process.env, VOYAGE_ALLOW_MOCK: "1", VOYAGE_PROVIDER_FIXTURE: path.resolve("tests/fixtures/voyage-provider.json"), VOYAGE_DATA_DIR: dataDir },
+    });
+    expect(result.status, result.stderr).toBe(0);
+    const output = JSON.parse(result.stdout);
+    expect(output.schemaVersion).toBe("voyage.skill.v1");
+    expect(output.ok).toBe(true);
+    expect(output.providerStatus.overall).toBe("MOCK");
+  });
+
+  it("keeps the runtime independent of UI and browser globals", async () => {
+    const files = ["src/skill/runtime.ts", "src/skill/repository.ts", "src/skill/providers.ts", "src/skill/cli.ts"];
+    const source = (await Promise.all(files.map((file) => readFile(file, "utf8")))).join("\n");
+    expect(source).not.toMatch(/from ["']react|zustand|localStorage|\bwindow\b/);
+  });
+  it("returns ranked multimodal route options and an optimized recommendation", async () => {
+    const options = await runtime.getRouteOptions({
+      origin: { lat: 29.5627, lng: 106.5791 },
+      destination: { lat: 29.5525, lng: 106.5475 },
+      city: "重庆",
+      fallbackPolicy: "deny",
+      context: { travelers: 2, walkingTolerance: "low", fatigue: "high", weather: "rain" },
+    }) as any;
+    expect(options.ok).toBe(true);
+    expect(options.data.routeOptions.options.length).toBeGreaterThanOrEqual(4);
+    expect(options.data.routeOptions.options.map((item: any) => item.mode))
+      .toEqual(expect.arrayContaining(["walk", "metro", "bus", "taxi", "drive"]));
+    expect(options.data.routeOptions.options[0]).toHaveProperty("score");
+
+    const optimized = await runtime.optimizeTransport({
+      origin: { lat: 29.5627, lng: 106.5791 },
+      destination: { lat: 29.5525, lng: 106.5475 },
+      city: "重庆",
+      fallbackPolicy: "deny",
+      context: { travelers: 2, walkingTolerance: "low", fatigue: "high", weather: "rain" },
+    }) as any;
+    expect(optimized.data.recommended.score).toBeGreaterThanOrEqual(optimized.data.alternatives[0].score);
+  });
+
+  it("retrieves travel knowledge and creates a route-mode replan proposal", async () => {
+    // Isolate from the developer machine's live credentials so the retrieval
+    // path under test stays the curated-local fixture behavior.
+    process.env.VOYAGE_SKIP_LOCAL_CREDENTIALS = "1";
+    try {
+      const knowledge = await runtime.retrieveTravelKnowledge({
+        city: "重庆",
+        query: "洪崖洞 夜景 人流 步行",
+        tags: ["walking"],
+        limit: 5,
+      }) as any;
+      expect(knowledge.data.matches.length).toBeGreaterThan(0);
+      expect(knowledge.data.matches.some((item: any) => item.city === "重庆")).toBe(true);
+      expect(knowledge.data.retrieval.strategy).toEqual(expect.any(String));
+
+      const created = await create();
+      const before = structuredClone(created.data.trip) as Trip;
+      const replanned = await runtime.replanTrip({
+        tripId: before.id,
+        instruction: "下雨而且很累，优先少走路",
+        fallbackPolicy: "deny",
+        context: { walkingTolerance: "low", fatigue: "high", weather: "rain", travelers: 2 },
+      }) as any;
+      expect(replanned.data.routePlans.length).toBeGreaterThan(0);
+      expect(replanned.data.knowledge.length).toBeGreaterThan(0);
+      expect(replanned.data.knowledgeRetrievals.length).toBeGreaterThan(0);
+      expect(replanned.data.knowledgeRetrievals[0]).toHaveProperty("strategy");
+      expect(replanned.data.proposalId).toEqual(expect.any(String));
+      expect((await repository.getTrip(before.id))?.trip).toEqual(before);
+    } finally {
+      delete process.env.VOYAGE_SKIP_LOCAL_CREDENTIALS;
+    }
+  });
+
+  it("uses RAG-aware replanning for natural-language transport changes", async () => {
+    const created = await create();
+    const trip = created.data.trip as Trip;
+    const proposal = await runtime.proposeChange({
+      tripId: trip.id,
+      instruction: "第二天太累了，少走一点。",
+      fallbackPolicy: "estimated",
+    }) as any;
+
+    expect(proposal.data.proposalId).toEqual(expect.any(String));
+    expect(proposal.data.routePlans.length).toBeGreaterThan(0);
+    expect(proposal.data.knowledgeRetrievals.length).toBeGreaterThan(0);
+    expect(proposal.data.actions.every((action: any) => action.payload.dayId === trip.days[1].id)).toBe(true);
+  });
+
+});
+
+describe("voyage skill standalone copy", () => {
+  // The CLI wrapper is a process boundary by design, so standalone verification
+  // reuses the established spawnSync argv-array pattern (no shell involved).
+  const repoRoot = process.cwd();
+
+  function assertSafePath(value: string): string {
+    if (!/^[A-Za-z0-9_\-\\/.:]+$/.test(value)) throw new Error(`unsafe child-process path: ${value}`);
+    return value;
+  }
+
+  async function copySkill(tmp: string) {
+    const skillDir = path.join(tmp, "voyage");
+    await cp(path.join(repoRoot, "skills", "voyage"), skillDir, { recursive: true });
+    return skillDir;
+  }
+
+  function runSkill(skillDir: string, cwd: string, command: string, inputPath: string, envExtra: Record<string, string>) {
+    const script = assertSafePath(path.join(skillDir, "scripts", "voyage.mjs"));
+    return spawnSync(process.execPath, [script, command, "--input", assertSafePath(inputPath)], {
+      cwd,
+      encoding: "utf8",
+      env: { ...process.env, ...envExtra },
+    });
+  }
+
+  const baseEnv = (tmp: string) => ({
+    VOYAGE_REPO: repoRoot,
+    VOYAGE_ALLOW_MOCK: "1",
+    VOYAGE_PROVIDER_FIXTURE: path.join(repoRoot, "tests", "fixtures", "voyage-provider.json"),
+    VOYAGE_DATA_DIR: path.join(tmp, "data"),
+  });
+
+  it("runs from a skill folder copied outside the repository without cloning anything", async () => {
+    const tmp = await mkdtemp(path.join(os.tmpdir(), "voyage-standalone-"));
+    const skillDir = await copySkill(tmp);
+    try {
+      const inputFile = path.join(tmp, "search.json");
+      await writeFile(inputFile, JSON.stringify({ destination: "重庆", query: "景点", limit: 3 }), "utf8");
+      const result = runSkill(skillDir, tmp, "search-places", inputFile, baseEnv(tmp));
+      expect(result.status, result.stderr).toBe(0);
+      const output = JSON.parse(result.stdout);
+      expect(output.schemaVersion).toBe("voyage.skill.v1");
+      expect(output.ok).toBe(true);
+      expect(output.generatedAt).toBeTruthy();
+      expect(output.data.places.length).toBeGreaterThan(0);
+    } finally {
+      await rm(tmp, { recursive: true, force: true });
+    }
+  });
+
+  it("creates a trip and applies a revision-locked update end to end", async () => {
+    const tmp = await mkdtemp(path.join(os.tmpdir(), "voyage-standalone-"));
+    const skillDir = await copySkill(tmp);
+    try {
+      const createInput = path.join(tmp, "create.json");
+      await writeFile(createInput, JSON.stringify({
+        destination: "重庆",
+        startDate: "2026-10-01",
+        days: 2,
+        people: 2,
+        budget: 2500,
+        fallbackPolicy: "estimated",
+      }), "utf8");
+      const created = runSkill(skillDir, tmp, "create-trip", createInput, baseEnv(tmp));
+      expect(created.status, created.stderr).toBe(0);
+      const createEnvelope = JSON.parse(created.stdout);
+      expect(createEnvelope.ok).toBe(true);
+      const tripId = createEnvelope.data.tripId as string;
+      const revision = createEnvelope.data.revision as number;
+      expect(tripId).toBeTruthy();
+      expect(revision).toBeGreaterThanOrEqual(1);
+
+      const updateInput = path.join(tmp, "update.json");
+      await writeFile(updateInput, JSON.stringify({
+        tripId,
+        expectedTripRevision: revision,
+        patch: { title: "重庆精简两日", budget: 1800 },
+      }), "utf8");
+      const updated = runSkill(skillDir, tmp, "update-trip", updateInput, baseEnv(tmp));
+      expect(updated.status, updated.stderr).toBe(0);
+      const updateEnvelope = JSON.parse(updated.stdout);
+      expect(updateEnvelope.ok).toBe(true);
+      expect(updateEnvelope.data.trip.title).toBe("重庆精简两日");
+      expect(updateEnvelope.data.trip.budget).toBe(1800);
+      expect(updateEnvelope.data.revision).toBeGreaterThan(revision);
+
+      // A stale revision must be rejected, never silently applied.
+      const stale = runSkill(skillDir, tmp, "update-trip", updateInput, baseEnv(tmp));
+      expect(stale.status).toBe(1);
+      const staleEnvelope = JSON.parse(stale.stdout);
+      expect(staleEnvelope.ok).toBe(false);
+      expect(staleEnvelope.error.code).toBe("REVISION_CONFLICT");
+    } finally {
+      await rm(tmp, { recursive: true, force: true });
+    }
+  });
+
+  it("keeps runtime.lock.json pointed at the v0.2.0 release commit", async () => {
+    const lock = JSON.parse(await readFile(path.join(repoRoot, "skills", "voyage", "runtime.lock.json"), "utf8")) as { ref: string; commit: string };
+    expect(lock.ref).toBe("voyage-skill-v0.2.0");
+    expect(lock.commit).toMatch(/^[0-9a-f]{40}$/);
+  });
+});

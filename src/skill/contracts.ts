@@ -1,0 +1,606 @@
+import { z } from "zod";
+import { offerKindSchema } from "@/schemas/offers";
+import { socialEvidenceSchema, socialPlatformStatusSchema, socialSignalSchema } from "@/schemas/social";
+import { placeSchema, tripSchema } from "@/schemas/trip";
+import { planningProfileSchema } from "@/schemas/planning";
+import { replanReasonSchema } from "@/schemas/trust";
+import { reservationImportItemSchema, reservationInputSchema, reservationStatusSchema, reservationTypeSchema } from "@/schemas/reservation";
+import { travelEventInputSchema } from "@/schemas/travel-event";
+import { preferenceKeySchema } from "@/services/memory/preferences";
+import { MAX_TRIP_DAYS } from "@/lib/trip-limits";
+
+export const SCHEMA_VERSION = "voyage.skill.v1" as const;
+export type ProviderLevel =
+  | "REAL" | "ESTIMATED" | "CACHED" | "CURATED" | "SOCIAL"
+  | "MOCK" | "UNKNOWN" | "UNAVAILABLE" | "UNSTRUCTURED" | "PERMISSION_REQUIRED";
+
+export interface ProviderStatus {
+  overall: ProviderLevel;
+  places: ProviderLevel;
+  routes: ProviderLevel;
+  weather: ProviderLevel;
+  travelOffers: ProviderLevel;
+  social: ProviderLevel;
+  knowledge: ProviderLevel;
+}
+
+export const fallbackPolicySchema = z.enum(["deny", "estimated"]).default("deny");
+
+const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "expected YYYY-MM-DD");
+const point = z.object({ lat: z.number().min(-90).max(90), lng: z.number().min(-180).max(180) });
+
+export const createTripInputSchema = z
+  .object({
+    origin: z.string().max(80).default(""),
+    destination: z.string().min(1).max(80),
+    startDate: isoDate,
+    endDate: isoDate.optional(),
+    days: z.number().int().min(1).max(MAX_TRIP_DAYS).optional(),
+    people: z.number().int().min(1).max(20).default(1),
+    travelers: z.number().int().min(1).max(20).optional(),
+    budget: z.number().min(0).max(1_000_000).default(2500),
+    preferences: z.array(z.string().max(30)).max(12).default([]),
+    vibes: z.array(z.string().max(30)).max(12).optional(),
+    walkingTolerance: z.enum(["low", "medium", "high"]).default("medium"),
+    prompt: z.string().max(2000).default(""),
+    planningProfile: planningProfileSchema.optional(),
+    planningSessionId: z.string().min(1).max(100).optional(),
+    fallbackPolicy: fallbackPolicySchema,
+    includeExternalOffers: z.boolean().default(false),
+    includeSocialEvidence: z.boolean().default(false),
+    offerCategories: z.array(offerKindSchema).max(6).default(["train", "hotel", "ticket", "restaurant", "coupon"]),
+  })
+  .refine((value) => value.endDate || value.days, { message: "endDate or days is required" });
+
+export const getTripInputSchema = z.object({ tripId: z.string().min(1) });
+
+export const searchPlacesInputSchema = z.object({
+  destination: z.string().min(1),
+  query: z.string().default("景点"),
+  category: z.enum(["attraction", "food", "cafe", "hotel", "activity", "shopping", "transport", "viewpoint"]).optional(),
+  limit: z.number().int().min(1).max(50).default(12),
+});
+
+export const planRouteInputSchema = z.object({
+  origin: point,
+  destination: point,
+  mode: z.enum(["walk", "metro", "bus", "taxi", "drive"]).default("walk"),
+  city: z.string().min(1),
+  fallbackPolicy: fallbackPolicySchema,
+});
+
+export const getWeatherInputSchema = z.object({
+  destination: z.string().min(1),
+  dates: z.array(isoDate).min(1).max(7),
+  fallbackPolicy: fallbackPolicySchema,
+});
+
+const urbanTransportModeSchema = z.enum(["walk", "metro", "bus", "taxi", "drive"]);
+
+export const transportContextSchema = z.object({
+  budgetSensitivity: z.enum(["low", "medium", "high"]).optional(),
+  walkingTolerance: z.enum(["low", "medium", "high"]).optional(),
+  fatigue: z.enum(["low", "medium", "high"]).optional(),
+  weather: z.enum(["clear", "rain", "heat", "cold", "unknown"]).optional(),
+  travelers: z.number().int().min(1).max(20).optional(),
+  hasLuggage: z.boolean().optional(),
+  accessibilityNeeds: z.boolean().optional(),
+}).default({});
+
+export const getRouteOptionsInputSchema = z.object({
+  origin: point,
+  destination: point,
+  city: z.string().min(1).max(80),
+  modes: z.array(urbanTransportModeSchema).min(1).max(5).optional(),
+  context: transportContextSchema,
+  fallbackPolicy: fallbackPolicySchema,
+});
+
+export const optimizeTransportInputSchema = getRouteOptionsInputSchema;
+
+export const retrieveTravelKnowledgeInputSchema = z.object({
+  city: z.string().min(1).max(80),
+  query: z.string().min(1).max(2000),
+  tags: z.array(z.string().min(1).max(80)).max(20).default([]),
+  limit: z.number().int().min(1).max(20).default(8),
+});
+
+export const replanTripInputSchema = z.object({
+  tripId: z.string().min(1),
+  dayId: z.string().optional(),
+  instruction: z.string().max(2000).optional(),
+  context: transportContextSchema,
+  fallbackPolicy: fallbackPolicySchema,
+});
+
+export const searchFlightsInputSchema = z.object({
+  departureCityCode: z.string().regex(/^[A-Z]{3}$/),
+  arrivalCityCode: z.string().regex(/^[A-Z]{3}$/),
+  departureDate: isoDate,
+  returnDate: isoDate.optional(),
+  tripType: z.union([z.literal(1), z.literal(2)]).default(1),
+  cabinClass: z.enum(["ALL_CABIN", "Y", "FC", "F", "C"]).default("ALL_CABIN"),
+  externalAgentName: z.string().min(1).max(80),
+  searchMode: z.union([z.literal(0), z.literal(2)]).default(2),
+  hasChild: z.boolean().default(false),
+  hasInfant: z.boolean().default(false),
+});
+
+export const searchTravelOffersInputSchema = z.object({
+  origin: z.string().max(80).optional(),
+  destination: z.string().min(1).max(80),
+  startDate: isoDate.optional(),
+  endDate: isoDate.optional(),
+  travelers: z.number().int().min(1).max(20).default(1),
+  budget: z.number().min(0).max(1_000_000).optional(),
+  query: z.string().min(1).max(2000),
+  city: z.string().max(80).optional(),
+  categories: z.array(offerKindSchema).max(6).default(["train", "hotel", "ticket", "restaurant", "coupon"]),
+});
+
+export const refreshTravelOffersInputSchema = searchTravelOffersInputSchema.extend({
+  tripId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+});
+
+export const reorderDayInputSchema = z.object({
+  tripId: z.string().min(1),
+  dayId: z.string().min(1),
+  orderedItemIds: z.array(z.string().min(1)).min(1).max(30),
+  expectedTripRevision: z.number().int().min(1),
+});
+
+/**
+ * A traveller adding a provider place to a day. Like reorder-day this is a
+ * direct user action (not an LLM proposal), but the place must carry real
+ * provider provenance — the runtime rejects anything that cannot be traced to
+ * AMap/demo data, so a hand-built object can never enter a trip.
+ */
+export const addPlaceItemInputSchema = z.object({
+  tripId: z.string().min(1),
+  dayId: z.string().min(1),
+  place: placeSchema,
+  expectedTripRevision: z.number().int().min(1),
+});
+
+/**
+ * Checking an item off on the "today" screen. Without this the status only
+ * ever lived in localStorage and silently vanished on the next reload, since
+ * the workspace rehydrates from the server-side runtime.
+ */
+export const setItemStatusInputSchema = z.object({
+  tripId: z.string().min(1),
+  itemId: z.string().min(1),
+  status: z.enum(["planned", "current", "done", "skipped"]),
+  expectedTripRevision: z.number().int().min(1),
+});
+
+/**
+ * Removing a stop from its day (the PoiCard overflow menu). A direct user
+ * mutation like reorder-day, so it goes through the runtime under a revision
+ * lock — the old local-only patch vanished on the next server rehydrate.
+ */
+export const removeItemInputSchema = z.object({
+  tripId: z.string().min(1),
+  itemId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+});
+
+/**
+ * Removing an entire day (the DayHeader menu). Like remove-item this is a
+ * direct user mutation under the revision lock; the day's items, tasks and
+ * segments go with it and the remaining days are re-indexed.
+ */
+export const removeDayInputSchema = z.object({
+  tripId: z.string().min(1),
+  dayId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+});
+
+/**
+ * One-click import of a guide route (小红书/抖音/微信 text): ordered places are
+ * spread across trip days in one transaction, each getting a check-in task so
+ * the traveller can tick them off as they go. Total places are capped — this
+ * is an interactive import, not a bulk data load.
+ */
+export const importRouteInputSchema = z.object({
+  tripId: z.string().min(1),
+  assignments: z
+    .array(z.object({
+      dayId: z.string().min(1),
+      places: z.array(placeSchema).min(1).max(20),
+    }).strict())
+    .min(1)
+    .max(7),
+  createTasks: z.boolean().default(true),
+  expectedTripRevision: z.number().int().min(1),
+});
+
+/** Persisting a task checkbox (the inline list used to patch local state only). */
+export const setTaskStatusInputSchema = z.object({
+  tripId: z.string().min(1),
+  taskId: z.string().min(1),
+  status: z.enum(["todo", "done"]),
+  expectedTripRevision: z.number().int().min(1),
+});
+
+/**
+ * Bookmarking a provider place onto the trip's map without scheduling it.
+ * The map-mark buttons used to patch the local store only, so every mark
+ * vanished on the next server rehydrate.
+ */
+export const addPlaceInputSchema = z.object({
+  tripId: z.string().min(1),
+  place: placeSchema,
+  expectedTripRevision: z.number().int().min(1),
+});
+
+/**
+ * Restores a full trip snapshot — the server side of undo/redo. User-initiated
+ * only (the UI's undo button), never LLM-driven, and guarded by the same
+ * revision lock as every other write. The trip id is forced to the input
+ * tripId so a snapshot can never be written under another trip's record.
+ */
+export const restoreTripInputSchema = z.object({
+  tripId: z.string().min(1),
+  trip: tripSchema,
+  expectedTripRevision: z.number().int().min(1),
+});
+
+export const proposeChangeInputSchema = z.object({
+  tripId: z.string().min(1),
+  instruction: z.string().min(1).max(2000),
+  dayId: z.string().optional(),
+  asOf: z.string().datetime().optional(),
+  fallbackPolicy: fallbackPolicySchema,
+});
+
+export const applyChangeInputSchema = z.object({
+  tripId: z.string().min(1),
+  proposalId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+  confirmed: z.literal(true),
+  /** One-time credential issued by propose-change; short TTL, bound to the
+   * proposal's changeSet hash. Without it the model could apply its own
+   * proposal without a human in the loop. */
+  proposalToken: z.string().min(1),
+});
+
+/**
+ * Itinerary Optimizer v1: reschedules planned items of an existing trip into
+ * a geographically clustered, time-window aware plan. The result is always a
+ * proposal (Diff + proposalToken) — never a direct write — so the user sees
+ * and confirms every move.
+ */
+export const optimizeItineraryInputSchema = z.object({
+  tripId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+  strategy: z.enum(["balanced"]).default("balanced"),
+  preserveMustVisit: z.boolean().default(true),
+  fallbackPolicy: fallbackPolicySchema,
+});
+
+/**
+ * Trust replan: turns validation issues into a deterministic proposal built
+ * only from places already present in the trip's candidate pool. Always a
+ * proposal (Diff + proposalToken) — never a direct write.
+ */
+export const proposeTrustReplanInputSchema = z.object({
+  tripId: z.string().min(1),
+  reason: replanReasonSchema.default("USER_REQUEST"),
+  dayId: z.string().min(1).optional(),
+  expectedTripRevision: z.number().int().min(1).optional(),
+});
+
+/** Today Mode v2: read-only execution context for the current day. */
+export const getTodayContextInputSchema = z.object({
+  tripId: z.string().min(1),
+  dayId: z.string().min(1).optional(),
+  /** ISO datetime or "HH:mm" — drives lateness detection and day resolution. */
+  asOf: z.string().min(4).max(40).optional(),
+});
+
+export const getPlaceInputSchema = z.object({
+  placeId: z.string().min(1).optional(),
+  tripId: z.string().min(1).optional(),
+  name: z.string().min(1).max(80).optional(),
+  city: z.string().min(1).max(80).optional(),
+}).refine((value) => (value.placeId && value.tripId) || (value.name && value.city), {
+  message: "provide tripId+placeId, or name+city",
+});
+
+export const updateTripInputSchema = z.object({
+  tripId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+  patch: z.object({
+    title: z.string().min(1).max(120).optional(),
+    budget: z.number().min(0).max(1_000_000).optional(),
+    travelers: z.number().int().min(1).max(20).optional(),
+    vibe: z.array(z.string().min(1).max(30)).max(12).optional(),
+    prompt: z.string().max(2000).optional(),
+  }).refine((patch) => Object.keys(patch).length > 0, { message: "patch must not be empty" }),
+});
+
+/**
+ * Reservation domain (Phase 6.1): real-world commitments the itinerary must
+ * respect. Writes are revision-locked like every other trip mutation; the
+ * runtime owns id/tripId/provenance so callers can never forge them.
+ */
+const reservationPatchSchema = reservationInputSchema.partial()
+  .refine((patch) => Object.keys(patch).length > 0, { message: "patch must not be empty" });
+
+export const addReservationInputSchema = z.object({
+  tripId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+  reservation: reservationInputSchema,
+});
+
+export const updateReservationInputSchema = z.object({
+  tripId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+  reservationId: z.string().min(1),
+  patch: reservationPatchSchema,
+});
+
+export const removeReservationInputSchema = z.object({
+  tripId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+  reservationId: z.string().min(1),
+});
+
+export const getReservationsInputSchema = z.object({
+  tripId: z.string().min(1),
+  status: reservationStatusSchema.optional(),
+  type: reservationTypeSchema.optional(),
+});
+
+export const importReservationsInputSchema = z.object({
+  tripId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+  vendor: z.string().max(40).optional(),
+  reservations: z.array(reservationImportItemSchema).min(1).max(20),
+});
+
+/** Phase 6.2: read the constraint engine's view of a trip (or one day). */
+export const getConstraintsInputSchema = z.object({
+  tripId: z.string().min(1),
+  dayId: z.string().min(1).optional(),
+});
+
+/**
+ * Phase 6.3: record a normalized real-world change on the trip. The caller
+ * supplies the observation; the runtime owns id/tripId/occurredAt/provenance
+ * so simulated or manual events are always labeled with their true source.
+ */
+export const recordTravelEventInputSchema = z.object({
+  tripId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+  event: travelEventInputSchema,
+});
+
+/** Phase 6.3: events active at a point in time (defaults to now). */
+export const getActiveEventsInputSchema = z.object({
+  tripId: z.string().min(1),
+  asOf: z.string().min(10).max(40).optional(),
+  /** Include events already acknowledged by the traveller. */
+  includeAcknowledged: z.boolean().default(false),
+});
+
+/** Phase 6.4: deterministic execution state of a trip at an instant. */
+export const getTripStateInputSchema = z.object({
+  tripId: z.string().min(1),
+  asOf: z.string().min(10).max(40).optional(),
+});
+
+/**
+ * Phase 6.5: analyze one event's impact WITHOUT recording it. Either pass an
+ * inline event or reference an already-recorded one by id. Read-only.
+ */
+export const analyzeEventImpactInputSchema = z.object({
+  tripId: z.string().min(1),
+  eventId: z.string().min(1).optional(),
+  event: travelEventInputSchema.optional(),
+  asOf: z.string().min(10).max(40).optional(),
+}).refine((input) => Boolean(input.eventId) !== Boolean(input.event), {
+  message: "provide exactly one of eventId or event",
+});
+
+/**
+ * Phase 6.6: event-driven replan. The chain is deterministic — TripState →
+ * Impact → strategy actions → Diff proposal — and ends in the SAME proposal/
+ * proposalToken/apply pipeline as every other change. The LLM never applies.
+ */
+export const replanStrategySchema = z.enum([
+  "auto", "shift", "skip", "indoorSwap", "replace", "release", "reduceWalking", "reduceBudget", "swapMode", "monitor",
+]);
+
+export const proposeEventReplanInputSchema = z.object({
+  tripId: z.string().min(1),
+  eventId: z.string().min(1).optional(),
+  event: travelEventInputSchema.optional(),
+  asOf: z.string().min(10).max(40).optional(),
+  strategy: replanStrategySchema.default("auto"),
+  fallbackPolicy: fallbackPolicySchema,
+}).refine((input) => Boolean(input.eventId) !== Boolean(input.event), {
+  message: "provide exactly one of eventId or event",
+});
+
+/**
+ * Phase 6.8: inject a simulated event (demo/dev only). The recorded event is
+ * always labeled source="simulation" — it can never pass as provider data.
+ * The incidentId ties a simulation to the reservation/place/segment it acts on.
+ */
+export const simulateTravelEventInputSchema = z.object({
+  tripId: z.string().min(1),
+  expectedTripRevision: z.number().int().min(1),
+  incident: z.enum(["flight_delay", "heavy_rain", "poi_closed", "user_late", "road_congested"]),
+  /** Incident parameters. */
+  delayMinutes: z.number().int().min(5).max(720).optional(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  placeId: z.string().optional(),
+  segmentId: z.string().optional(),
+  reservationId: z.string().optional(),
+  flightNo: z.string().max(10).optional(),
+  minutes: z.number().int().min(5).max(720).optional(),
+});
+
+/**
+ * Phase 6.9: conservative traveler preference memory. Workspace-scoped, not
+ * trip-scoped; the tripId here only routes the command to a workspace.
+ */
+export const getTravelerMemoryInputSchema = z.object({}).strict();
+
+export const updateTravelerMemoryInputSchema = z.object({
+  entries: z.array(z.object({
+    key: preferenceKeySchema,
+    value: z.string().trim().min(1).max(60),
+    source: z.string().trim().min(1).max(80).default("user"),
+  })).min(1).max(8),
+});
+
+export const deleteTravelerMemoryInputSchema = z.object({
+  key: preferenceKeySchema,
+});
+
+export const disableTravelerMemoryInputSchema = z.object({
+  disabled: z.boolean(),
+});
+
+export const searchSocialInputSchema = z.object({
+  city: z.string().min(1).max(80),
+  query: z.string().max(120).optional(),
+  poi: z.string().max(120).optional(),
+  platform: z.string().max(40).optional(),
+  limit: z.number().int().min(1).max(20).default(10),
+});
+
+export const getSocialTrendingInputSchema = z.object({
+  city: z.string().min(1).max(80),
+  platform: z.string().max(40).optional(),
+  limit: z.number().int().min(1).max(20).default(10),
+});
+
+export const getSocialEvidenceInputSchema = z.object({
+  city: z.string().min(1).max(80),
+  poi: z.string().max(120).optional(),
+  query: z.string().max(120).optional(),
+  tripId: z.string().min(1).optional(),
+  limit: z.number().int().min(1).max(20).default(10),
+});
+
+export const commandSchemas = {
+  "create-trip": createTripInputSchema,
+  "get-trip": getTripInputSchema,
+  "search-places": searchPlacesInputSchema,
+  "plan-route": planRouteInputSchema,
+  "get-route-options": getRouteOptionsInputSchema,
+  "optimize-transport": optimizeTransportInputSchema,
+  "retrieve-travel-knowledge": retrieveTravelKnowledgeInputSchema,
+  "replan-trip": replanTripInputSchema,
+  "get-weather": getWeatherInputSchema,
+  "search-flights": searchFlightsInputSchema,
+  "search-travel-offers": searchTravelOffersInputSchema,
+  "refresh-travel-offers": refreshTravelOffersInputSchema,
+  "reorder-day": reorderDayInputSchema,
+  "add-place-item": addPlaceItemInputSchema,
+  "set-item-status": setItemStatusInputSchema,
+  "remove-item": removeItemInputSchema,
+  "remove-day": removeDayInputSchema,
+  "add-place": addPlaceInputSchema,
+  "import-route": importRouteInputSchema,
+  "set-task-status": setTaskStatusInputSchema,
+  "restore-trip": restoreTripInputSchema,
+  "propose-change": proposeChangeInputSchema,
+  "apply-change": applyChangeInputSchema,
+  "optimize-itinerary": optimizeItineraryInputSchema,
+  "propose-trust-replan": proposeTrustReplanInputSchema,
+  "get-today-context": getTodayContextInputSchema,
+  "get-place": getPlaceInputSchema,
+  "update-trip": updateTripInputSchema,
+  "search-social": searchSocialInputSchema,
+  "get-social-trending": getSocialTrendingInputSchema,
+  "get-social-evidence": getSocialEvidenceInputSchema,
+  "add-reservation": addReservationInputSchema,
+  "update-reservation": updateReservationInputSchema,
+  "remove-reservation": removeReservationInputSchema,
+  "get-reservations": getReservationsInputSchema,
+  "import-reservations": importReservationsInputSchema,
+  "get-constraints": getConstraintsInputSchema,
+  "record-travel-event": recordTravelEventInputSchema,
+  "get-active-events": getActiveEventsInputSchema,
+  "get-trip-state": getTripStateInputSchema,
+  "analyze-event-impact": analyzeEventImpactInputSchema,
+  "propose-event-replan": proposeEventReplanInputSchema,
+  "simulate-travel-event": simulateTravelEventInputSchema,
+  "get-traveler-memory": getTravelerMemoryInputSchema,
+  "update-traveler-memory": updateTravelerMemoryInputSchema,
+  "delete-traveler-memory": deleteTravelerMemoryInputSchema,
+  "disable-traveler-memory": disableTravelerMemoryInputSchema,
+} as const;
+
+export type SkillCommand = keyof typeof commandSchemas;
+
+export function successEnvelope(data: unknown, providerStatus?: ProviderStatus, warnings: string[] = [], provenance?: { source: string; confidence?: number }) {
+  return {
+    schemaVersion: SCHEMA_VERSION,
+    ok: true as const,
+    data,
+    warnings,
+    generatedAt: new Date().toISOString(),
+    ...(providerStatus ? { providerStatus } : {}),
+    ...(provenance ? { provenance } : {}),
+  };
+}
+
+export function errorEnvelope(code: string, message: string, details?: unknown) {
+  return {
+    schemaVersion: SCHEMA_VERSION,
+    ok: false as const,
+    error: { code, message, ...(details === undefined ? {} : { details }) },
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Output schemas describe the shape of `data` per command. Complex nested
+ * payloads reuse the canonical trip schema; everything else is validated on
+ * the envelope fields every entry point must expose.
+ */
+const tripDataSchema = z.object({ tripId: z.string(), trip: z.unknown(), revision: z.number().int(), tripHash: z.string() }).passthrough();
+const socialEvidenceListSchema = z.object({
+  city: z.string(), queryId: z.string().optional(), evidence: z.array(socialEvidenceSchema),
+  signals: z.array(socialSignalSchema).default([]), platformStatus: socialPlatformStatusSchema,
+  warnings: z.array(z.string()),
+}).passthrough();
+
+export const outputSchemas = {
+  "create-trip": tripDataSchema,
+  "get-trip": tripDataSchema,
+  "update-trip": tripDataSchema,
+  "apply-change": tripDataSchema,
+  "reorder-day": tripDataSchema,
+  "add-place-item": tripDataSchema,
+  "set-item-status": tripDataSchema,
+  "remove-item": tripDataSchema,
+  "remove-day": tripDataSchema,
+  "add-place": tripDataSchema,
+  "import-route": tripDataSchema,
+  "set-task-status": tripDataSchema,
+  "restore-trip": tripDataSchema,
+  "search-places": z.object({ places: z.array(z.object({ id: z.string(), name: z.string(), category: z.string() }).passthrough()) }).passthrough(),
+  "get-place": z.object({ place: z.object({ id: z.string(), name: z.string() }).passthrough(), matchBasis: z.enum(["trip_lookup", "provider_search"]) }).passthrough(),
+  "plan-route": z.object({ route: z.object({ mode: z.string(), distanceMeters: z.number(), durationMinutes: z.number(), estimated: z.boolean() }).passthrough() }).passthrough(),
+  "get-route-options": z.object({ routeOptions: z.object({ recommendedMode: z.string(), options: z.array(z.unknown()).min(1) }).passthrough() }).passthrough(),
+  "optimize-transport": z.object({ recommended: z.unknown(), routeOptions: z.unknown() }).passthrough(),
+  "retrieve-travel-knowledge": z.object({ matches: z.array(z.unknown()), retrieval: z.object({ strategy: z.string(), vectorUsed: z.boolean(), databaseUsed: z.boolean() }).passthrough() }).passthrough(),
+  "get-weather": z.object({ weather: z.array(z.unknown()).min(1) }).passthrough(),
+  "search-flights": z.object({ flights: z.unknown(), provenance: z.unknown().optional() }).passthrough(),
+  "search-travel-offers": z.object({ offers: z.array(z.unknown()) }).passthrough(),
+  "refresh-travel-offers": tripDataSchema,
+  "replan-trip": z.object({ proposalId: z.string().nullable(), baseRevision: z.number().int().optional() }).passthrough(),
+  "propose-trust-replan": z.object({ proposalId: z.string().nullable(), tripId: z.string(), baseRevision: z.number().int(), requiresConfirmation: z.boolean() }).passthrough(),
+  "propose-change": z.object({ proposalId: z.string(), tripId: z.string(), baseRevision: z.number().int() }).passthrough(),
+  "search-social": socialEvidenceListSchema,
+  "get-social-trending": socialEvidenceListSchema,
+  "get-social-evidence": socialEvidenceListSchema.extend({ context: z.unknown().optional() }),
+} as const;
